@@ -1,7 +1,7 @@
-import 'package:fincodern/pages/home/HomePage.dart';
-import 'package:fincodern/pages/user/ProfilPage.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:mobile_fincopay/pages/home/HomePage.dart';
+import 'package:mobile_fincopay/pages/user/ProfilPage.dart';
 
 class BottomNavigationPage extends StatefulWidget {
   const BottomNavigationPage({Key? key}) : super(key: key);

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fincodern/utils/Routes.dart';
-import 'package:fincodern/widgets/ReusableButtonWidgets.dart';
+import 'package:mobile_fincopay/utils/Routes.dart';
+import 'package:mobile_fincopay/widgets/ReusableButtonWidgets.dart';
 
 class DiscoverPage extends StatefulWidget {
   @override
