@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:fincodern/utils/Constantes.dart';
+import 'package:mobile_fincopay/utils/Constantes.dart';
 
 class HttpResponse {
   bool status;

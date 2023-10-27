@@ -1,9 +1,9 @@
-import 'package:fincodern/utils/Queries.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:fincodern/models/UserModel.dart';
-import 'package:fincodern/utils/Endpoints.dart';
-import 'package:fincodern/utils/StockageKeys.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:mobile_fincopay/models/UserModel.dart';
+import 'package:mobile_fincopay/utils/Endpoints.dart';
+import 'package:mobile_fincopay/utils/Queries.dart';
+import 'package:mobile_fincopay/utils/StockageKeys.dart';
 
 class UserController with ChangeNotifier {
   UserModel? user;

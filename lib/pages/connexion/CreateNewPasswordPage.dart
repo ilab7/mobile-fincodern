@@ -1,11 +1,11 @@
-import 'package:fincodern/controllers/UserController.dart';
-import 'package:fincodern/widgets/ChargementWidget.dart';
-import 'package:fincodern/widgets/MessageWidgets.dart';
-import 'package:fincodern/widgets/PasswordWithCriteriatWidgets.dart';
-import 'package:fincodern/utils/Routes.dart';
-import 'package:fincodern/widgets/EntryfieldConfirmWidgets.dart';
-import 'package:fincodern/widgets/ReusableButtonWidgets.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile_fincopay/controllers/UserController.dart';
+import 'package:mobile_fincopay/utils/Routes.dart';
+import 'package:mobile_fincopay/widgets/ChargementWidget.dart';
+import 'package:mobile_fincopay/widgets/EntryfieldConfirmWidgets.dart';
+import 'package:mobile_fincopay/widgets/MessageWidgets.dart';
+import 'package:mobile_fincopay/widgets/PasswordWithCriteriatWidgets.dart';
+import 'package:mobile_fincopay/widgets/ReusableButtonWidgets.dart';
 import 'package:provider/provider.dart';
 
 class CreateNewPasswordPage extends StatefulWidget {

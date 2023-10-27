@@ -1,8 +1,8 @@
-import 'package:fincodern/controllers/UserController.dart';
-import 'package:fincodern/settings/SettingsPage.dart';
-import 'package:fincodern/pages/news/NotificationsPage.dart';
-import 'package:fincodern/utils/Routes.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile_fincopay/controllers/UserController.dart';
+import 'package:mobile_fincopay/pages/news/NotificationsPage.dart';
+import 'package:mobile_fincopay/settings/SettingsPage.dart';
+import 'package:mobile_fincopay/utils/Routes.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {

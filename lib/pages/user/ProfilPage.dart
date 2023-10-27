@@ -1,7 +1,7 @@
-import 'package:fincodern/controllers/UserController.dart';
-import 'package:fincodern/utils/Routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:mobile_fincopay/controllers/UserController.dart';
+import 'package:mobile_fincopay/utils/Routes.dart';
 import 'package:provider/provider.dart';
 
 class ProfilPage extends StatefulWidget {

@@ -1,11 +1,11 @@
-import 'package:fincodern/controllers/UserController.dart';
-import 'package:fincodern/pages/connexion/VerifyOTP.dart';
-import 'package:fincodern/utils/Routes.dart';
-import 'package:fincodern/widgets/ChargementWidget.dart';
-import 'package:fincodern/widgets/EntryFieldMobileNumberWidgets.dart';
-import 'package:fincodern/widgets/MessageWidgets.dart';
-import 'package:fincodern/widgets/ReusableButtonWidgets.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile_fincopay/controllers/UserController.dart';
+import 'package:mobile_fincopay/pages/connexion/VerifyOTP.dart';
+import 'package:mobile_fincopay/utils/Routes.dart';
+import 'package:mobile_fincopay/widgets/ChargementWidget.dart';
+import 'package:mobile_fincopay/widgets/EntryFieldMobileNumberWidgets.dart';
+import 'package:mobile_fincopay/widgets/MessageWidgets.dart';
+import 'package:mobile_fincopay/widgets/ReusableButtonWidgets.dart';
 import 'package:provider/provider.dart';
 
 class LoginWithOTPPage extends StatefulWidget {

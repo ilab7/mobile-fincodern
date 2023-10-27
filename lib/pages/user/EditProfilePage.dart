@@ -1,11 +1,10 @@
 import 'dart:io';
-
-import 'package:fincodern/widgets/ChargementWidget.dart';
-import 'package:fincodern/widgets/EntryFieldEmailWidgets.dart';
-import 'package:fincodern/widgets/EntryFieldMobileNumberWidgets.dart';
-import 'package:fincodern/widgets/ReusableEntryFieldWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mobile_fincopay/widgets/ChargementWidget.dart';
+import 'package:mobile_fincopay/widgets/EntryFieldEmailWidgets.dart';
+import 'package:mobile_fincopay/widgets/EntryFieldMobileNumberWidgets.dart';
+import 'package:mobile_fincopay/widgets/ReusableEntryFieldWidgets.dart';
 
 class EditProfilePage extends StatefulWidget {
   @override
