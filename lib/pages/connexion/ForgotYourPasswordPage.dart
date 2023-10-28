@@ -117,9 +117,11 @@ class _ForgotYourPasswordState extends State<ForgotYourPassword> {
                   EntryFieldMobileNumberWithValidateWidgets(
                     onChanged: (value) {
                       setState(() {
-                        isPhoneFilled = value.isNotEmpty;
-                        isEmailFilled = false;
-                        mobileNumberoremailaddress.text = value; // Store the value in mobileNumberoremailaddress
+                        if(value.isNotEmpty) {
+                          isPhoneFilled = true;
+                        } else {
+                          isPhoneFilled = false;
+                        }
                       });
                     },
                     readOnly: isEmailFilled,
@@ -133,9 +135,11 @@ class _ForgotYourPasswordState extends State<ForgotYourPassword> {
                   EntryFieldEmailWithValidateWidgets(
                     onChanged: (value) {
                       setState(() {
-                        isEmailFilled = value.isNotEmpty;
-                        isPhoneFilled = false;
-                        mobileNumberoremailaddress.text = value; // Store the value in mobileNumberoremailaddress
+                        if(value.isNotEmpty) {
+                          isEmailFilled = true;
+                        } else {
+                          isEmailFilled = false;
+                        }
                       });
                     },
                     readOnly: isPhoneFilled,

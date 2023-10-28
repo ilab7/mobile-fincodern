@@ -299,7 +299,7 @@ class _LoginPageState extends State<LoginPage> {
 
     isVisible = false;
     setState(() {});
-    print(response.status);
+
     Navigator.popAndPushNamed(context, Routes.BottomNavigationPageRoutes); //To delete after api connexion
     if (response.status) {
       await Future.delayed(Duration(seconds: 1));
@@ -326,16 +326,5 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       isLoadingWaitingAPIResponse = false;
     });
-  }
-
-  showSnackBar(context, String message) {
-    final scaffold = ScaffoldMessenger.of(context);
-    scaffold.showSnackBar(SnackBar(
-      content: Text(message),
-      action:
-      SnackBarAction(label: 'OK',
-          textColor: Colors.orange,
-          onPressed: scaffold.hideCurrentSnackBar),
-    ));
   }
 }

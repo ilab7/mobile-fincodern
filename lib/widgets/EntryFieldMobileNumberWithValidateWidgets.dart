@@ -47,7 +47,7 @@ class _EntryFieldMobileNumberWithValidateWidgetsState
             fontSize: 15,
           ),
         ),
-        SizedBox(height: 7),
+        //SizedBox(height: 7),
         Container(
             padding: EdgeInsets.zero,
             width: double.infinity,
@@ -60,6 +60,15 @@ class _EntryFieldMobileNumberWithValidateWidgetsState
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
               ],
+              onChanged: (value) {
+                final phoneNumber = value.completeNumber; // Extract the phone number string
+                setState(() {
+                  if (phoneNumber == null || phoneNumber.isEmpty) {
+                    return; // Allow empty phone number field
+                  }
+                });
+                widget.onChanged(phoneNumber); // Pass the phone number string to the onChanged callback
+              },
               onTap: () {
                 setState(() {
                   isFocused = false;
@@ -89,6 +98,12 @@ class _EntryFieldMobileNumberWithValidateWidgetsState
                 ),
                 suffixIcon: widget.suffixIcon,
               ),
+              validator: (value) {
+                if (value != null && widget.isMobileNumberWithValidate) {
+                  return 'Invalid Phone number';
+                }
+                return null;
+              },
               initialCountryCode: 'CD',
             )),
       ],
