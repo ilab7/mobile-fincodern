@@ -118,7 +118,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     },
                     child: CircleAvatar(
                       radius: 80.0,
-                      backgroundImage: _selectedImage != null ? FileImage(_selectedImage!) : AssetImage('assets/avatard.jfif') as ImageProvider,
+                      backgroundImage: _selectedImage != null ? FileImage(_selectedImage!) : AssetImage('assets/avatard.png') as ImageProvider,
                     ),
                   ),
                 ),

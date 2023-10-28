@@ -76,7 +76,7 @@ flutter:
     - assets/accept.png
     - assets/done.png
     - assets/logo_fincopay.png
-    - assets/avatard.jfif
+    - assets/avatard.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
