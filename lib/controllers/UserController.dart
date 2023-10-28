@@ -88,4 +88,19 @@ class UserController with ChangeNotifier {
     }
     return response;
   }
+
+  Future<HttpResponse> updateProfil(Map data) async {
+    var url = "${Endpoints.updateProfil}";
+    var token = stockage?.read(StockageKeys.tokenKey);
+
+    HttpResponse response = await postData(url, data, token: token);
+    if (response.status) {
+      user = UserModel.fromJson(response.data?['user'] ?? {});
+      stockage?.write("user", response.data?["user"] ?? {});
+      stockage?.write("token", response.data?["token"]?? "");
+
+      notifyListeners();
+    }
+    return response;
+  }
 }

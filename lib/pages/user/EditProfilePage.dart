@@ -1,10 +1,15 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mobile_fincopay/controllers/UserController.dart';
 import 'package:mobile_fincopay/widgets/ChargementWidget.dart';
 import 'package:mobile_fincopay/widgets/EntryFieldEmailWidgets.dart';
 import 'package:mobile_fincopay/widgets/EntryFieldMobileNumberWidgets.dart';
+import 'package:mobile_fincopay/widgets/GenderWidget.dart';
+import 'package:gender_picker/source/enums.dart';
+import 'package:mobile_fincopay/widgets/MessageWidgets.dart';
 import 'package:mobile_fincopay/widgets/ReusableEntryFieldWidgets.dart';
+import 'package:provider/provider.dart';
 
 class EditProfilePage extends StatefulWidget {
   @override
@@ -26,6 +31,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
   bool isVisible = false;
   var formKey = GlobalKey<FormState>();
 
+  Gender? selectedGender;
+
   @override
   void dispose() {
     _nameController.dispose();
@@ -41,22 +48,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
         _selectedImage = File(pickedImage.path);
       });
     }
-  }
-
-  Future<void> _saveChanges() async {
-    setState(() {
-      _isSaving = true;
-    });
-
-    // Simulate saving changes
-    await Future.delayed(Duration(seconds: 2));
-
-    setState(() {
-      _isSaving = false;
-    });
-
-    // Show a success message or navigate back to the previous screen
-    // ...
   }
 
   @override
@@ -112,7 +103,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                   ),
                                   ListTile(
                                     leading: Icon(Icons.photo_library),
-                                    title: Text('Choose from galerie'),
+                                    title: Text('Choose from gallery'),
                                     onTap: () {
                                       _pickImage(ImageSource.gallery);
                                       Navigator.of(context).pop();
@@ -159,11 +150,60 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   required: true,
                   isName: false,
                 ),
+                GenderSelectionWidget(
+                  showOtherGender: true,
+                  alignVertical: false,
+                  onChanged: (Gender? gender) {
+                    print(gender);
+                  },
+                ),
               ],
             ),
           ),
         ],
       ),
     );
+  }
+
+  Future<void> _saveChanges() async {
+    FocusScope.of(context).requestFocus(new FocusNode());
+    if (!formKey.currentState!.validate()) {
+      return;
+    }
+
+    isVisible = true;
+    setState(() {
+      _isSaving = true;
+    });
+
+    var ctrl = context.read<UserController>();
+    // Create the request payload
+    Map data = {
+      'fullName': fullname.text,
+      'email': email.text,
+      'phone': phone.text,
+      'address': address.text,
+      'gender': selectedGender.toString(),
+      // Add any other fields as needed
+    };
+
+    var response = await ctrl.updateProfil(data);
+    await Future.delayed(Duration(seconds: 1));
+
+    isVisible = false;
+    setState(() {});
+
+    if (response.status) {
+      await Future.delayed(Duration(seconds: 1));
+      setState(() {});
+      } else {
+      var msg =
+      response.isException == true ? response.errorMsg : (response.data?['message']);
+      MessageWidgets.showSnack(context, msg);
+    }
+
+    setState(() {
+      _isSaving = false;
+    });
   }
 }

@@ -5,4 +5,5 @@ class Endpoints {
   static const String sendOTP = "/api/auth/send-otp";
   static const String verifyOTP = "/api/auth/verify-otp";
   static const String updatePassword = "/api/auth/updatepassword";
+  static const String updateProfil = "/api/auth/updateprofil";
 }
