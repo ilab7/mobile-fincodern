@@ -195,6 +195,7 @@ class NavigationDrawer extends StatelessWidget {
           leading: Icon(Icons.help_center_outlined),
           title: Text('Help and Comments'),
           onTap: (){
+            showSnackBar(context, "Available soon !");
           },
         ),
         Divider(color: Colors.grey,),

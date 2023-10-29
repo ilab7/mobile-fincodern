@@ -190,7 +190,7 @@ class _ProfilPageState extends State<ProfilPage> {
                             size: 17,
                           ),
                           onTap: () {
-
+                            showSnackBar(context, "Available soon !");
                           },
                         ),
                         ListTile(
@@ -209,7 +209,7 @@ class _ProfilPageState extends State<ProfilPage> {
                             size: 17,
                           ),
                           onTap: () {
-
+                            showSnackBar(context, "Available soon !");
                           },
                         ),
                         ListTile(
@@ -279,7 +279,8 @@ class _ProfilPageState extends State<ProfilPage> {
               child: Text(
                 "Cancel",
                 style: TextStyle(
-                    fontSize: 16),
+                    fontSize: 16
+                ),
               ),
               onPressed: () {
                 Navigator.pop(context, false);

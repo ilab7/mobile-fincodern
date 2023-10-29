@@ -139,7 +139,9 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        showSnackBar(context, "Available soon !");
+                      },
                       child: Column(
                         children: [
                           Container(
@@ -249,6 +251,20 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  showSnackBar(context, String message) {
+    final scaffold = ScaffoldMessenger.of(context);
+    scaffold.showSnackBar(
+      SnackBar(
+        content: Text(message),
+        action: SnackBarAction(
+          label: 'Ok',
+          textColor: Colors.orange,
+          onPressed: scaffold.hideCurrentSnackBar,
         ),
       ),
     );
