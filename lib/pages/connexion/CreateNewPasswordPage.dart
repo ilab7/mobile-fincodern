@@ -53,19 +53,21 @@ class _CreateNewPasswordPageState extends State<CreateNewPasswordPage> {
                         children: [
                           InkWell(
                             onTap: (){
-                              Navigator.pushReplacementNamed(context, Routes.ForgotYourPasswordPageRoutes);
+                              Navigator.pop(context, Routes.LoginPageRoutes);
                             },
                             child: Icon(
                               Icons.arrow_back_ios,
                               //color: Colors.black,
                             ),
                           ),
-                          Container(
-                            height: 70,
-                            child: Image.asset(
-                              'assets/logo_fincopay.png',
-                              width: 300,
-                              height: 300,
+                          Expanded(
+                            child: Container(
+                              height: 70,
+                              child: Image.asset(
+                                'assets/logo_fincopay.png',
+                                width: 300,
+                                height: 300,
+                              ),
                             ),
                           ),
                         ],

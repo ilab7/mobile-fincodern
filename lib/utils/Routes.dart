@@ -18,4 +18,6 @@ class Routes {
   static const String CreateNewPasswordUpdatedPageRoutes = "/createnewpasswordupdatedpage";
   static const String PasswordUpdatedPageRoutes = "/passwordupdatedpage";
   static const String EditProfilePageRoutes = "/editprofilepage";
+  static const String VerifyOtpSignUpPageRoutes = "/verifyotpsignuppage";
+  static const String NavigationDrawerMenuRoutes = "/navigationdrawermenu";
 }

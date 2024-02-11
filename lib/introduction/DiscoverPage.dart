@@ -61,7 +61,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                         borderWidth: 1.5,
                         textColor: Color(0xFF336699),
                         onPressed: () {
-                          Navigator.pushReplacementNamed(context, Routes.SignUpPagePageRoutes);
+                          Navigator.pushNamed(context, Routes.SignUpPagePageRoutes);
                         },
                         color: Colors.white
                     ),
@@ -72,7 +72,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                         children: [
                           InkWell(
                             onTap: () {
-                              Navigator.pushReplacementNamed(
+                              Navigator.pushNamed(
                                   context, Routes.LoginWithOTPPageRoutes);
                               setState(() {
                                 isButtonPressedLoginwithphonenumber =

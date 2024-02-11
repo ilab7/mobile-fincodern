@@ -28,13 +28,16 @@ class _SettingsPageState extends State<SettingsPage> {
                 },
                 child: Icon(
                   Icons.arrow_back_ios,
+                  color: Colors.white,
                 ),
               ),
             ],
           ),
         ),
         backgroundColor: Color(0xFF040034),
-        title: Text('Settings'),
+        title: Text('Settings',
+          style: TextStyle(color: Colors.white),
+        ),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -75,7 +78,9 @@ class _SettingsPageState extends State<SettingsPage> {
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Color(0xFF040034),
                                     ),
-                                    child: Text('Click here'),
+                                    child: Text('Click here',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
                                   ),
                                   SizedBox(height: 16),
                                   Text(
@@ -194,7 +199,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                     InkWell(
                       onTap: () {
-                        Navigator.pushReplacementNamed(context, Routes.UpdatePasswordPageRoutes);
+                        Navigator.pushNamed(context, Routes.UpdatePasswordPageRoutes);
                       },
                       child: Column(
                         children: [

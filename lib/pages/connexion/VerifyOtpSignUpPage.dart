@@ -1,31 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:mobile_fincopay/controllers/UserController.dart';
+import 'package:mobile_fincopay/utils/Routes.dart';
+import 'package:mobile_fincopay/widgets/MessageWidgets.dart';
 import 'package:mobile_fincopay/widgets/ReusableButtonWidgets.dart';
 
-class VerifyOTP extends StatefulWidget {
-  final String buttonText;
-  final String routeName;
-  final VoidCallback? onPressed;
-  final VoidCallback? onBackButtonPressed;
-  final void Function(List<TextEditingController>) updateVariableCallback;
+class VerifyOtpSignUpPage extends StatefulWidget {
+  final String? userId;
 
-  VerifyOTP({required this.buttonText,
-    required this.routeName,
-    this.onPressed,
-    this.onBackButtonPressed,
-    required this.updateVariableCallback,
-  });
+  const VerifyOtpSignUpPage({Key? key, required this.userId}) : super(key: key);
+
   @override
-  _VerifyOTPState createState() => _VerifyOTPState();
+  _VerifyOtpSignUpPageState createState() => _VerifyOtpSignUpPageState();
 }
 
-class _VerifyOTPState extends State<VerifyOTP> {
+class _VerifyOtpSignUpPageState extends State<VerifyOtpSignUpPage> {
+  String? get userId => widget.userId;
+
   late List<TextEditingController> _controllers;
   late String otpValue;
-
-  void updateVariable() {
-    widget.updateVariableCallback(_controllers);
-  }
 
   late int _numberOfDigits;
 
@@ -67,10 +61,9 @@ class _VerifyOTPState extends State<VerifyOTP> {
                       child: Row(
                         children: [
                           InkWell(
-                            onTap: widget.onBackButtonPressed,
-                            /*onTap: (){
-                              Navigator.pushNamedAndRemoveUntil(context, Routes.LoginPageRoutes, ModalRoute.withName('/discoverpage'),);
-                            },*/
+                            onTap: (){
+                              Navigator.pop(context, Routes.SignUpPagePageRoutes);
+                            },
                             child: Icon(
                               Icons.arrow_back_ios,
                               //color: Colors.black,
@@ -118,18 +111,21 @@ class _VerifyOTPState extends State<VerifyOTP> {
                       ),
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: List.generate(
-                        _numberOfDigits,
-                            (index) => buildDigitTextField(index),
+                    Form(
+                      key: formKey, // Assign the globalKey to the Form widget
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: List.generate(
+                          _numberOfDigits,
+                              (index) => buildDigitTextField(index),
+                        ),
                       ),
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height * 0.05),
                     ReusableButtonWidgets(
-                      text: widget.buttonText,
+                      text: 'Verify Otp',
                       fontSize: 14,
-                      onPressed: widget.onPressed,
+                      onPressed: isLoadingWaitingAPIResponse ? null : _handleVerifyOtpPressed,
                       color: Color(0xFF336699),
                     ),
                   ],
@@ -172,5 +168,75 @@ class _VerifyOTPState extends State<VerifyOTP> {
         ),
       ),
     );
+  }
+
+
+  Future<void> VerifyOtpPressed() async {
+    FocusScope.of(context).requestFocus(new FocusNode());
+    if (!formKey.currentState!.validate()) {
+      return;
+    }
+
+    isVisible = true;
+    setState(() {
+      isLoadingWaitingAPIResponse = true;
+    });
+
+    // Retrieve the OTP value from the controllers
+    otpValue = '';
+    for (var controller in _controllers) {
+      otpValue += controller.text;
+    }
+
+    var ctrl = context.read<UserController>();
+    Map<String, dynamic> data = {
+      'userId': userId, // Introduce the userId value here
+      'otp': otpValue, // Add the OTP value to the data map
+    };
+
+    var res = await ctrl.verifyOTPRequest(data);
+    await Future.delayed(Duration(seconds: 1));
+
+    isVisible = false;
+    setState(() {});
+
+    if (res.status) {
+      await Future.delayed(Duration(seconds: 1));
+      setState(() {});
+
+      Navigator.pushNamedAndRemoveUntil(context, Routes.LoginPageRoutes, ModalRoute.withName('/discoverpage'),);
+
+    } else {
+      var msg = res.isException == true ? res.errorMsg : (res.data?['message']);
+      MessageWidgets.showSnack(context, msg);
+    }
+    setState(() {
+      isLoadingWaitingAPIResponse = false;
+    });
+  }
+
+  void _handleVerifyOtpPressed() async {
+    if(isLoadingWaitingAPIResponse) return;
+
+    setState(() {
+      isLoadingWaitingAPIResponse = true;
+    });
+
+    await VerifyOtpPressed();
+
+    setState(() {
+      isLoadingWaitingAPIResponse = false;
+    });
+  }
+
+  showSnackBar(context, String message) {
+    final scaffold = ScaffoldMessenger.of(context);
+    scaffold.showSnackBar(SnackBar(
+      content: Text(message),
+      action:
+      SnackBarAction(label: 'OK',
+          textColor: Colors.orange,
+          onPressed: scaffold.hideCurrentSnackBar),
+    ));
   }
 }

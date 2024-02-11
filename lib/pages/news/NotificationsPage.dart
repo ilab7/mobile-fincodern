@@ -14,19 +14,21 @@ class NotificationsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
           leading: InkWell(
-            child: Icon(Icons.arrow_back),
+            child: Icon(Icons.arrow_back, color: Colors.white,),
             onTap: () {
               Navigator.pop(context);
             },
           ),
-          title: Text('Notifications'),
+          title: Text('Notifications',
+              style: TextStyle(color: Colors.white),
+          ),
           backgroundColor: Color(0xFF040034),
           actions: [
             Theme(
               data: Theme.of(context).copyWith(
                   //textTheme: TextTheme().apply(bodyColor: Colors.black),
                   dividerColor: Colors.black,
-                  iconTheme: IconThemeData(color: Colors.orange)),
+                  iconTheme: IconThemeData(color: Colors.white)),
               child: PopupMenuButton<int>(
                 color: Colors.white,
                 itemBuilder: (context) => [

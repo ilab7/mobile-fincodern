@@ -7,6 +7,7 @@ Widget EntryFieldMobileNumberWidgets({
   String label = "",
   required TextEditingController ctrl,
   TextInputType type = TextInputType.number,
+  Function(String)? onChanged,
   bool required = false,
 }) {
   return Container(
@@ -33,7 +34,10 @@ Widget EntryFieldMobileNumberWidgets({
       ),
       initialCountryCode: 'CD',
       onChanged: (phone) {
-        print(phone.completeNumber);
+        ctrl.text = phone.completeNumber; // Update the value of the controller
+        if (onChanged != null) {
+          onChanged(phone.completeNumber); // Calling of the callback function
+        }
       },
     )
   );

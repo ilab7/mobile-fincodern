@@ -64,19 +64,21 @@ class _LoginWithOTPPageState extends State<LoginWithOTPPage> {
                         children: [
                           InkWell(
                             onTap: (){
-                              Navigator.pushReplacementNamed(context, Routes.LoginPageRoutes);
+                              Navigator.pushNamedAndRemoveUntil(context, Routes.LoginPageRoutes, ModalRoute.withName('/discoverpage'),);
                             },
                             child: Icon(
                               Icons.arrow_back_ios,
                               //color: Colors.black,
                             ),
                           ),
-                          Container(
-                            height: 70,
-                            child: Image.asset(
-                              'assets/logo_fincopay.png',
-                              width: 300,
-                              height: 300,
+                          Expanded(
+                            child: Container(
+                              height: 70,
+                              child: Image.asset(
+                                'assets/logo_fincopay.png',
+                                width: 300,
+                                height: 300,
+                              ),
                             ),
                           ),
                         ],
@@ -123,10 +125,7 @@ class _LoginWithOTPPageState extends State<LoginWithOTPPage> {
                           Expanded(
                             child: InkWell(
                               onTap: () {
-                                Navigator.pushReplacementNamed(context, Routes.LoginPageRoutes);
-                                setState(() {
-                                  isButtonPressedBacktologin = !isButtonPressedBacktologin;
-                                });
+                                Navigator.pushNamedAndRemoveUntil(context, Routes.LoginPageRoutes, ModalRoute.withName('/discoverpage'),);
                               },
                               child: Text(
                                 'Back to login',
@@ -180,10 +179,12 @@ class _LoginWithOTPPageState extends State<LoginWithOTPPage> {
           updateVariableCallback: updateVariableCallback,
           routeName: Routes.BottomNavigationPageRoutes,
           onPressed: () {
-            Navigator.pushReplacementNamed(context, Routes.BottomNavigationPageRoutes);
+            //Navigator.popAndPushNamed(context, Routes.BottomNavigationPageRoutes);
+            Navigator.pushNamedAndRemoveUntil(context, Routes.BottomNavigationPageRoutes, ModalRoute.withName('/discoverpage'),);
           },
           onBackButtonPressed: () {
-            Navigator.pushReplacementNamed(context, Routes.LoginWithOTPPageRoutes);
+            //Navigator.pop(context, Routes.LoginWithOTPPageRoutes);
+            Navigator.pushNamedAndRemoveUntil(context, Routes.LoginPageRoutes, ModalRoute.withName('/discoverpage'),);
           },
         ),
       ),
@@ -199,10 +200,12 @@ class _LoginWithOTPPageState extends State<LoginWithOTPPage> {
             updateVariableCallback: updateVariableCallback,
             routeName: Routes.BottomNavigationPageRoutes,
             onPressed: () {
-              Navigator.pushReplacementNamed(context, Routes.BottomNavigationPageRoutes);
+              //Navigator.popAndPushNamed(context, Routes.BottomNavigationPageRoutes);
+              Navigator.pushNamedAndRemoveUntil(context, Routes.BottomNavigationPageRoutes, ModalRoute.withName('/discoverpage'),);
             },
             onBackButtonPressed: () {
-              Navigator.pushReplacementNamed(context, Routes.LoginWithOTPPageRoutes);
+              //Navigator.pop(context, Routes.LoginWithOTPPageRoutes);
+              Navigator.pushNamedAndRemoveUntil(context, Routes.LoginPageRoutes, ModalRoute.withName('/discoverpage'),);
             },
           ),
         ),

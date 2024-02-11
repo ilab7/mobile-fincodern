@@ -59,7 +59,7 @@ class _AccountFoundedPageState extends State<AccountFoundedPage> {
                         children: [
                           InkWell(
                             onTap: (){
-                              Navigator.pushReplacementNamed(context, Routes.LoginPageRoutes);
+                              Navigator.pop(context, Routes.LoginPageRoutes);
                             },
                             child: Icon(
                               Icons.arrow_back_ios,

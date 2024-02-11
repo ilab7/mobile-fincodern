@@ -66,7 +66,7 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
                       children: [
                         InkWell(
                           onTap: (){
-                            Navigator.pushReplacementNamed(context, Routes.SettingsPageRoutes);
+                            Navigator.pop(context, Routes.SettingsPageRoutes);
                           },
                           child: Icon(
                             Icons.arrow_back_ios,
@@ -161,7 +161,7 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
                         Expanded(
                           child: InkWell(
                             onTap: () {
-                              Navigator.pushReplacementNamed(context, Routes.SettingsPageRoutes);
+                              Navigator.pop(context, Routes.SettingsPageRoutes);
                             },
                             child: Text(
                               'Skip for now',

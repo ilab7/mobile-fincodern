@@ -54,10 +54,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Profile'),
+        leading: InkWell(
+          child: Icon(Icons.arrow_back, color: Colors.white,),
+          onTap: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: Text('Edit Profile', style: TextStyle(color: Colors.white),),
         actions: [
           IconButton(
-            icon: Icon(Icons.check),
+            icon: Icon(Icons.check, color: Colors.white,),
             onPressed: _isSaving ? null : _saveChanges,
           ),
         ],

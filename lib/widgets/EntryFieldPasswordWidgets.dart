@@ -85,7 +85,7 @@ class _EntryFieldPasswordWidgetsState
   }
 
   bool isValidPassword(String value) {
-    if (value.length < 8) return false;
+    /*if (value.length < 8) return false;
 
     if (!value.contains(RegExp(r'[A-Z]'))) return false;
 
@@ -93,7 +93,7 @@ class _EntryFieldPasswordWidgetsState
 
     if (!value.contains(RegExp(r'[a-z]'))) return false;
 
-    if (!value.contains(RegExp(r'[0-9]'))) return false;
+    if (!value.contains(RegExp(r'[0-9]'))) return false;*/
 
     return true;
   }

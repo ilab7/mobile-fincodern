@@ -11,12 +11,12 @@ import 'package:mobile_fincopay/pages/connexion/LoginWithOTPPage.dart';
 import 'package:mobile_fincopay/pages/connexion/PasswordChangedPage.dart';
 import 'package:mobile_fincopay/pages/connexion/SignUpPage.dart';
 import 'package:mobile_fincopay/pages/home/HomePage.dart';
+import 'package:mobile_fincopay/pages/home/NavigationDrawerMenu.dart';
 import 'package:mobile_fincopay/pages/news/NotificationsPage.dart';
 import 'package:mobile_fincopay/pages/user/EditProfilePage.dart';
 import 'package:mobile_fincopay/pages/user/ProfilPage.dart';
 import 'package:mobile_fincopay/settings/SettingsPage.dart';
 import 'package:mobile_fincopay/settings/updatepassword/CreateNewPasswordUpdatedPage.dart';
-import 'package:mobile_fincopay/settings/updatepassword/PasswordUpdatedPage.dart';
 import 'package:mobile_fincopay/settings/updatepassword/UpdatePasswordPage.dart';
 import 'Routes.dart';
 
@@ -75,11 +75,12 @@ class RoutesManager {
       case Routes.CreateNewPasswordUpdatedPageRoutes:
         return MaterialPageRoute(builder: (_) => CreateNewPasswordUpdatedPage());
 
-      case Routes.PasswordUpdatedPageRoutes:
-        return MaterialPageRoute(builder: (_) => PasswordUpdatedPage());
+      case Routes.NavigationDrawerMenuRoutes:
+        return MaterialPageRoute(builder: (_) => NavigationDrawerMenu());
 
       case Routes.EditProfilePageRoutes:
         return MaterialPageRoute(builder: (_) => EditProfilePage());
+
       default:
         return null;
     }

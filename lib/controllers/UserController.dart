@@ -7,6 +7,7 @@ import 'package:mobile_fincopay/utils/StockageKeys.dart';
 
 class UserController with ChangeNotifier {
   UserModel? user;
+  String? token;
   bool loading = false;
   GetStorage? stockage;
   bool _isFirstTimeBienvenue = false;
@@ -24,12 +25,8 @@ class UserController with ChangeNotifier {
   Future<HttpResponse> register(Map data) async{
     var url = "${Endpoints.register}";
     HttpResponse response = await postData(url, data);
-
     if (response.status) {
-      user = UserModel.fromJson(response.data?['user'] ?? {});
-      stockage?.write("user", response.data?["user"] ?? {});
-      stockage?.write("token", response.data?["token"]?? "");
-
+      stockage?.write(StockageKeys.userKey, response.data?['data']['userId'] ?? {});
       notifyListeners();
     }
     return response;
@@ -39,17 +36,42 @@ class UserController with ChangeNotifier {
     var url = "${Endpoints.login}";
     HttpResponse response = await postData(url, data);
     if (response.status) {
-      user = UserModel.fromJson(response.data?['user'] ?? {});
-      stockage?.write(StockageKeys.tokenKey, response.data?["token"] ?? "");
+      stockage?.write(StockageKeys.tokenKey, response.data?["accessToken"] ?? "");
       notifyListeners();
     }
     return response;
   }
 
-  Future<HttpResponse> logout(Map data) async {
+  void getDataAPI() async {
+    var token = stockage?.read(StockageKeys.tokenKey);
+    var url = Endpoints.userDetails;
+    loading = true;
+    notifyListeners();
+    var response = await getData(url, token: token);
+    if(response != null){
+      user = UserModel.fromJson(response.data?['data']['userId'] ?? {});
+      notifyListeners();
+    }
+    loading = false;
+    notifyListeners();
+  }
+
+  Future<HttpResponse> logout(Map data) async{
     var url = "${Endpoints.logout}";
-    stockage?.remove(StockageKeys.tokenKey);
+    stockage?.read(StockageKeys.tokenKey);
     HttpResponse response = await postData(url, data);
+    return response;
+  }
+
+  Future<HttpResponse> verifyOTPRequest(Map data) async {
+    var url = "${Endpoints.verifyOTP}";
+    HttpResponse response = await postData(url, data);
+    if (response.status) {
+      user = UserModel.fromJson(response.data?['user'] ?? {});
+      stockage?.write(StockageKeys.tokenKey, response.data?[""] ?? "");
+      //stockage?.read(StockageKeys.tokenKey, response.data?['user']);
+      notifyListeners();
+    }
     return response;
   }
 
@@ -57,19 +79,6 @@ class UserController with ChangeNotifier {
     var url = "${Endpoints.sendOTP}";
     HttpResponse response = await sendOTP(url, data);
     if (response.status) {
-      user = UserModel.fromJson(response.data?['user'] ?? {});
-      stockage?.write(StockageKeys.tokenKey, response.data?["token"] ?? "");
-      notifyListeners();
-    }
-    return response;
-  }
-
-  Future<HttpResponse> verifyOTPRequest(Map data) async {
-    var url = "${Endpoints.verifyOTP}";
-    HttpResponse response = await verifyOTP(url, data);
-    if (response.status) {
-      user = UserModel.fromJson(response.data?['user'] ?? {});
-      stockage?.write(StockageKeys.tokenKey, response.data?["token"] ?? "");
       notifyListeners();
     }
     return response;

@@ -20,8 +20,11 @@ class _LoginPageState extends State<LoginPage> {
   bool isButtonPressedSkipfornow = false;
   bool isButtonPressedForgotpassword = false;
   bool isButtonPressedFindyouraccount = false;
+
   var email = TextEditingController();
   var password = TextEditingController();
+  var appname = "FINCOPAY";
+
   var formKey = GlobalKey<FormState>();
   bool isVisible = false;
   bool isLoadingWaitingAPIResponse = false;
@@ -99,10 +102,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             InkWell(
                               onTap: () {
-                                Navigator.pushReplacementNamed(context, Routes.SignUpPagePageRoutes);
-                                setState(() {
-                                  //isButtonPressedSkipfornow = !isButtonPressedSkipfornow;
-                                });
+                                Navigator.pushNamed(context, Routes.SignUpPagePageRoutes);
                               },
                               child: Text(
                                 'Sign Up',
@@ -139,10 +139,7 @@ class _LoginPageState extends State<LoginPage> {
                             Expanded(
                               child: InkWell(
                                 onTap: () {
-                                  Navigator.pushReplacementNamed(context, Routes.FindYourAccountPageRoutes);
-                                  setState(() {
-                                    isButtonPressedFindyouraccount = !isButtonPressedFindyouraccount;
-                                  });
+                                  Navigator.pushNamed(context, Routes.FindYourAccountPageRoutes);
                                 },
                                 child: Text(
                                   'Find your account',
@@ -154,10 +151,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             InkWell(
                               onTap: () {
-                                Navigator.pushReplacementNamed(context, Routes.ForgotYourPasswordPageRoutes);
-                                setState(() {
-                                  //isButtonPressedForgotpassword = !isButtonPressedForgotpassword;
-                                });
+                                Navigator.pushNamed(context, Routes.ForgotYourPasswordPageRoutes);
                               },
                               child: Text(
                                 'Forgot Password',
@@ -178,7 +172,6 @@ class _LoginPageState extends State<LoginPage> {
                           color: Color(0xFF336699),
                       ),
                       SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-
                       Container(
                         padding: EdgeInsets.symmetric(horizontal: 16.0),
                         child: Row(
@@ -240,9 +233,7 @@ class _LoginPageState extends State<LoginPage> {
                           ],
                         ),
                       ),
-
                       SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-
                       Container(
                         padding: EdgeInsets.symmetric(horizontal: 20.0),
                         child: Row(
@@ -250,7 +241,7 @@ class _LoginPageState extends State<LoginPage> {
                           children: [
                             InkWell(
                               onTap: () {
-                                Navigator.pushReplacementNamed(context, Routes.LoginWithOTPPageRoutes);
+                                Navigator.pushNamed(context, Routes.LoginWithOTPPageRoutes);
                                 setState(() {
                                   isButtonPressedLoginwithphonenumber = !isButtonPressedLoginwithphonenumber;
                                 });
@@ -291,7 +282,8 @@ class _LoginPageState extends State<LoginPage> {
     var ctrl = context.read<UserController>();
     Map data = {
       "email": email.text,
-      "password": password.text
+      "password": password.text,
+      "appName": appname,
     };
 
     var response = await ctrl.login(data);
@@ -300,14 +292,12 @@ class _LoginPageState extends State<LoginPage> {
     isVisible = false;
     setState(() {});
 
-    Navigator.popAndPushNamed(context, Routes.BottomNavigationPageRoutes); //To delete after api connexion
     if (response.status) {
       await Future.delayed(Duration(seconds: 1));
       setState(() {});
-      Navigator.pushReplacementNamed(context, Routes.BottomNavigationPageRoutes);
+      Navigator.pushNamedAndRemoveUntil(context, Routes.BottomNavigationPageRoutes, ModalRoute.withName('/loginpage'),);
     } else {
-      var msg =
-      response.isException == true ? response.errorMsg : (response.data?['message']);
+      var msg = response.isException == true ? response.errorMsg : (response.data?['message']);
       MessageWidgets.showSnack(context, msg);
     }
     setState(() {

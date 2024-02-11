@@ -1,93 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_fincopay/controllers/UserController.dart';
-import 'package:mobile_fincopay/pages/home/NavigationDrawerMenu.dart';
 import 'package:mobile_fincopay/pages/news/NotificationsPage.dart';
 import 'package:mobile_fincopay/settings/SettingsPage.dart';
 import 'package:mobile_fincopay/utils/Routes.dart';
 import 'package:provider/provider.dart';
 
-class HomePage extends StatefulWidget {
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      var userCtrl = context.read<UserController>();
-      userCtrl.getDataAPI();
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar: _appBar(context),
-    drawer: NavigationDrawerMenu(),
-    body: SingleChildScrollView(
-      child: Container(
-        height: MediaQuery.of(context).size.height,
-        padding: EdgeInsets.all(06.0),
-        child: Column(
-          children: [
-            SizedBox(height: MediaQuery.of(context).size.height * 0.4),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Home Page',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text(
-                'Page under development',
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-            ),
-          ],
+void main() {
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<UserController>(
+          create: (_) => UserController(),
         ),
-      ),
+        // Other providers...
+      ],
+      child: NavigationDrawerMenu(),
     ),
   );
 }
 
-AppBar _appBar(BuildContext context){
+class NavigationDrawerMenu extends StatefulWidget {
+  const NavigationDrawerMenu({super.key});
 
-  var userCtrl = context.watch<UserController>();
-
-  return AppBar(
-    actions: [
-      Container(
-        height: 45,
-        child: CircleAvatar(
-          radius: 52,
-          backgroundImage: AssetImage("${userCtrl.user?.image == null ? "assets/avatard.png" : userCtrl.user?.image!}"),
-        ),
-      ),
-    ],
-    backgroundColor: Color(0xFF040034),
-    iconTheme: IconThemeData(color: Colors.white), //Change the color of the menu icon
-  );
+  @override
+  State<NavigationDrawerMenu> createState() => _NavigationDrawerMenuState();
 }
 
-class NavigationDrawer extends StatelessWidget {
-  const NavigationDrawer({super.key});
+class _NavigationDrawerMenuState extends State<NavigationDrawerMenu> {
+  late UserController userCtrl;
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    userCtrl = context.watch<UserController>();
+  }
   @override
   Widget build(BuildContext context) => Drawer(
     child: SingleChildScrollView(
@@ -102,6 +48,7 @@ class NavigationDrawer extends StatelessWidget {
   );
 
   Widget buildHeader(BuildContext context) => Container(
+
     color: Color(0xFF040034),
     padding: EdgeInsets.only(
       top: 24 + MediaQuery.of(context).padding.top,
@@ -111,25 +58,23 @@ class NavigationDrawer extends StatelessWidget {
       children: [
         CircleAvatar(
           radius: 52,
-          //backgroundImage: AssetImage("${userCtrl.user?.image == null ? Image.asset("assets/avatard.png") : userCtrl.user?.image}"),
-          backgroundImage: AssetImage("assets/avatard.png"),
+          backgroundImage: AssetImage("${userCtrl.user?.image == null ? "assets/avatard.png" : userCtrl.user?.image!}"),
         ),
         SizedBox(height: 12,),
-        //Text('${userCtrl.user?.fullName==null ? "Name : Undefied" : userCtrl.user?.fullName}',
-        Text("Name : Undefied",
-        style: TextStyle(
-          fontSize: 23,
-          color: Colors.white,
+        Text('${userCtrl.user?.fullName==null ? "Name : Undifined" : userCtrl.user?.fullName}',
+          style: TextStyle(
+            fontSize: 23,
+            color: Colors.white,
+          ),
         ),
-        ),
-        //Text('${userCtrl.user?.email == null ? "Email : Undefeid" : userCtrl.user?.email}', style: TextStyle(
-        Text("Email : Undefeid", style: TextStyle(
+        Text('${userCtrl.user?.email == null ? "Email : Un" : userCtrl.user?.email}', style: TextStyle(
           fontSize: 15,
           color: Colors.white,
         ),),
       ],
     ),
   );
+
   Widget buildMenuItems(BuildContext context) => Container(
     padding: EdgeInsets.all(24.0),
     child: Wrap(
@@ -198,10 +143,10 @@ class NavigationDrawer extends StatelessWidget {
               child: Text(
                 "Confirm",
                 style: TextStyle(
-                  color: Colors.orange,
-                  fontSize: 16),),
+                    color: Colors.orange,
+                    fontSize: 16),),
               onPressed: () {
-                //setState(() {});
+                setState(() {});
                 var ctrl = context.read<UserController>();
                 Map data = {};
                 ctrl.logout(data);

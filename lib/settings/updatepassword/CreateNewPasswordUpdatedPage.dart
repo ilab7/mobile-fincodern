@@ -158,11 +158,12 @@ class _CreateNewPasswordUpdatedPageState extends State<CreateNewPasswordUpdatedP
     isVisible = false;
     setState(() {});
 
-    Navigator.pushReplacementNamed(context, Routes.SettingsPageRoutes);
+    //Navigator.pushNamedAndRemoveUntil(context, Routes.SettingsPageRoutes, ModalRoute.withName('/settingspage'),); //To remove after
+    Navigator.pushReplacementNamed(context, Routes.UpdatePasswordPageRoutes); //To remove after
     if (response.status) {
       await Future.delayed(Duration(seconds: 1));
       setState(() {});
-      Navigator.pushReplacementNamed(context, Routes.SettingsPageRoutes);
+      Navigator.pushNamedAndRemoveUntil(context, Routes.SettingsPageRoutes, ModalRoute.withName('/settingspage'),);
     } else {
       var msg = response.isException == true ? response.errorMsg : (response.data?['message']);
       MessageWidgets.showSnack(context, msg);

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_fincopay/controllers/UserController.dart';
+import 'package:mobile_fincopay/pages/connexion/VerifyOtpSignUpPage.dart';
 import 'package:mobile_fincopay/utils/Routes.dart';
 import 'package:mobile_fincopay/widgets/ChargementWidget.dart';
 import 'package:mobile_fincopay/widgets/EntryFieldEmailWidgets.dart';
@@ -12,23 +13,33 @@ import 'package:mobile_fincopay/widgets/ReusableEntryFieldWidgets.dart';
 import 'package:provider/provider.dart';
 
 class SignUpPage extends StatefulWidget {
+
   @override
   State<SignUpPage> createState() => _SignUpPageState();
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  bool iSButtonPressedSignIn = false;
-  bool isButtonPressedSkipfornow = false;
-  bool isButtonPressedLogin = false;
+  bool isButtonPressedLogin = false; // A flag to indicate if the login button is pressed
+
+  String? userId; // Declare the userId variable here
+
+  // All fields of register
   var email = TextEditingController();
   var password = TextEditingController();
   var confirm = TextEditingController();
   var phone = TextEditingController();
   var fullname = TextEditingController();
+  String appName = 'FINCOPAY';
 
   var formKey = GlobalKey<FormState>();
-  bool isVisible = false;
-  bool isLoadingWaitingAPIResponse = false;
+  bool isVisible = false; // A flag to control the visibility of a loading widget
+  bool isLoadingWaitingAPIResponse = false; // A flag to indicate if an API request is in progress
+
+  List<TextEditingController> otpValue = [];
+
+  void updateVariableCallback(List<TextEditingController> controllers) {
+    otpValue = controllers;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +47,7 @@ class _SignUpPageState extends State<SignUpPage> {
       body: Stack(
         children: [
           _body(context),
-          ChargementWidget(isVisible)
+          ChargementWidget(isVisible) // A loading widget that is shown when isVisible is true
         ],
       ),
     );
@@ -61,19 +72,20 @@ class _SignUpPageState extends State<SignUpPage> {
                           children: [
                             InkWell(
                               onTap: (){
-                                Navigator.pushReplacementNamed(context, Routes.LoginPageRoutes);
+                                Navigator.pushNamedAndRemoveUntil(context, Routes.LoginPageRoutes, ModalRoute.withName('/discoverpage'),);
                               },
                               child: Icon(
                                 Icons.arrow_back_ios,
-                                //color: Colors.black,
                               ),
                             ),
-                            Container(
-                              height: 70,
-                              child: Image.asset(
-                                'assets/logo_fincopay.png',
-                                width: 300,
-                                height: 300,
+                            Expanded(
+                              child: Container(
+                                height: 70,
+                                child: Image.asset(
+                                  'assets/logo_fincopay.png',
+                                  width: 300,
+                                  height: 300,
+                                ),
                               ),
                             ),
                           ],
@@ -111,7 +123,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             ),
                             InkWell(
                               onTap: () {
-                                Navigator.pushReplacementNamed(context, Routes.LoginPageRoutes);
+                                Navigator.pushNamedAndRemoveUntil(context, Routes.LoginPageRoutes, ModalRoute.withName('/discoverpage'),);
                                 setState(() {
                                   isButtonPressedLogin = !isButtonPressedLogin;
                                 });
@@ -120,7 +132,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                 'Login',
                                 style: TextStyle(
                                   fontSize: 15,
-                                  color: isButtonPressedSkipfornow ?  Colors.orange : Color(0xFF336699),
+                                  color: Color(0xFF336699),
                                 ),
                               ),
                             ),
@@ -199,27 +211,46 @@ class _SignUpPageState extends State<SignUpPage> {
       isLoadingWaitingAPIResponse = true;
     });
 
+    //Function to extract the contry code from the phone number
+    String extractFirstFourLetters(String input) {
+      if (input.length >= 4) {
+        return input.substring(0, 4);
+      } else {
+        return input;
+      }
+    }
+    String countryCode = extractFirstFourLetters(phone.text);
+
     var ctrl = context.read<UserController>();
     Map data = {
-      'fullname': fullname.text,
+      'fullName': fullname.text,
       'email': email.text,
       'phone': phone.text,
+      'countryCode': countryCode,
       'password': password.text,
-      'confirm': confirm.text,
+      'confirmPassword': confirm.text,
+      'appName': appName,
+      'roles':'user',
     };
-    print("VALUE OF ${password}");
-    print("Data to send to create an account $data");
+
     var response = await ctrl.register(data);
     await Future.delayed(Duration(seconds: 1));
 
     isVisible = false;
     setState(() {});
-    print("The Status response after resgistered ${response.status}");
-    Navigator.pushReplacementNamed(context, Routes.LoginPageRoutes);
+
+    userId = response.data?["data"]["userId"] ?? ''; // Here we take the UserId
+
     if (response.status) {
       await Future.delayed(Duration(seconds: 1));
       setState(() {});
-      Navigator.pushReplacementNamed(context, Routes.LoginPageRoutes);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => VerifyOtpSignUpPage(userId: userId),
+        ),
+      );
+
     } else {
       var msg = response.isException == true ? response.errorMsg : (response.data?['message']);
       MessageWidgets.showSnack(context, msg);
@@ -227,10 +258,12 @@ class _SignUpPageState extends State<SignUpPage> {
     setState(() {
       isLoadingWaitingAPIResponse = false;
     });
+
   }
 
   void _handleSignUpPressed() async {
     if(isLoadingWaitingAPIResponse) return;
+
     setState(() {
       isLoadingWaitingAPIResponse = true;
     });

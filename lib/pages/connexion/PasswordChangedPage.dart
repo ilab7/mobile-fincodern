@@ -28,18 +28,20 @@ class _PasswordChangedPageState extends State<PasswordChangedPage> {
                         children: [
                           InkWell(
                             onTap: (){
-                              Navigator.pushReplacementNamed(context, Routes.LoginPageRoutes);
+                              Navigator.pop(context, Routes.LoginPageRoutes);
                             },
                             child: Icon(
                               Icons.arrow_back_ios,
                             ),
                           ),
-                          Container(
-                            height: 70,
-                            child: Image.asset(
-                              'assets/logo_fincopay.png',
-                              width: 300,
-                              height: 300,
+                          Expanded(
+                            child: Container(
+                              height: 70,
+                              child: Image.asset(
+                                'assets/logo_fincopay.png',
+                                width: 300,
+                                height: 300,
+                              ),
                             ),
                           ),
                         ],
@@ -87,7 +89,7 @@ class _PasswordChangedPageState extends State<PasswordChangedPage> {
                       text: "Back to login",
                       fontSize: 14,
                       onPressed: (){
-                        Navigator.pushReplacementNamed(context, Routes.LoginPageRoutes);
+                        Navigator.pop(context, Routes.LoginPageRoutes);
                       },
                       color: Color(0xFF336699),
                     ),
