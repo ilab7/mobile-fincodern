@@ -7,7 +7,7 @@ import 'package:mobile_fincopay/pages/connexion/CreateNewPasswordPage.dart';
 import 'package:mobile_fincopay/pages/connexion/FindYourAccountPage.dart';
 import 'package:mobile_fincopay/pages/connexion/ForgotYourPasswordPage.dart';
 import 'package:mobile_fincopay/pages/connexion/LoginPage.dart';
-import 'package:mobile_fincopay/pages/connexion/LoginWithOTPPage.dart';
+import 'package:mobile_fincopay/pages/connexion/LoginWithPhoneNumberRequestOTPPage.dart';
 import 'package:mobile_fincopay/pages/connexion/PasswordChangedPage.dart';
 import 'package:mobile_fincopay/pages/connexion/SignUpPage.dart';
 import 'package:mobile_fincopay/pages/home/HomePage.dart';
@@ -33,8 +33,8 @@ class RoutesManager {
       case Routes.LoginPageRoutes:
         return MaterialPageRoute(builder:  (_) => LoginPage());
 
-      case Routes.LoginWithOTPPageRoutes:
-        return MaterialPageRoute(builder: (_) => LoginWithOTPPage());
+      case Routes.LoginWithPhoneNumberRequestOTPPageRoutes:
+        return MaterialPageRoute(builder: (_) => LoginWithPhoneNumberRequestOTPPage());
 
       case Routes.FindYourAccountPageRoutes:
         return MaterialPageRoute(builder: (_) => FindYourAccountPage());
@@ -77,6 +77,9 @@ class RoutesManager {
 
       case Routes.NavigationDrawerMenuRoutes:
         return MaterialPageRoute(builder: (_) => NavigationDrawerMenu());
+
+      case Routes.RequestOtpLoginWithPhonePageRoutes:
+        return MaterialPageRoute(builder: (_) => LoginWithPhoneNumberRequestOTPPage());
 
       case Routes.EditProfilePageRoutes:
         return MaterialPageRoute(builder: (_) => EditProfilePage());

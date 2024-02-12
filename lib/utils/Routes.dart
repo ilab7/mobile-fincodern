@@ -2,7 +2,7 @@ class Routes {
   static const String SplashScreenPageRoutes = "/splashscreenpage";
   static const String DiscoverPageRoutes = "/discoverpage";
   static const String LoginPageRoutes = "/loginpage";
-  static const String LoginWithOTPPageRoutes = "/loginwithotppage";
+  static const String LoginWithPhoneNumberRequestOTPPageRoutes = "/loginwithphonenumberrequestotppage";
   static const String FindYourAccountPageRoutes = "/findyouraccountpage";
   static const String AccountFoundedPageRoutes = "/accountfoundedpage";
   static const String SignUpPagePageRoutes = "/signuppage";
@@ -20,4 +20,5 @@ class Routes {
   static const String EditProfilePageRoutes = "/editprofilepage";
   static const String VerifyOtpSignUpPageRoutes = "/verifyotpsignuppage";
   static const String NavigationDrawerMenuRoutes = "/navigationdrawermenu";
+  static const String RequestOtpLoginWithPhonePageRoutes = "/requestotploginwithphonepage";
 }

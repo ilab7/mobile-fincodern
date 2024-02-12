@@ -75,8 +75,28 @@ class UserController with ChangeNotifier {
     return response;
   }
 
+  Future<HttpResponse> requestOTPPhoneNumber(Map data) async {
+    var url = "${Endpoints.login_with_phoneNumber}";
+    HttpResponse response = await postData(url, data);
+    if (response.status) {
+      stockage?.write(StockageKeys.userKey, response.data?['data']['userId'] ?? {});
+      notifyListeners();
+    }
+    return response;
+  }
+
+  Future<HttpResponse> ResendOTPForLoginWithPhoneNumber(Map data) async {
+    var url = "${Endpoints.resend_login_OTP}";
+    HttpResponse response = await postData(url, data);
+    if (response.status) {
+      stockage?.write(StockageKeys.userKey, response.data?['data']['userId'] ?? {});
+      notifyListeners();
+    }
+    return response;
+  }
+
   Future<HttpResponse> SendOTPRequest(Map data) async {
-    var url = "${Endpoints.sendOTP}";
+    var url = "${Endpoints.login_with_phoneNumber}";
     HttpResponse response = await sendOTP(url, data);
     if (response.status) {
       notifyListeners();

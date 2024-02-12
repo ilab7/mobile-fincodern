@@ -241,7 +241,7 @@ class _LoginPageState extends State<LoginPage> {
                           children: [
                             InkWell(
                               onTap: () {
-                                Navigator.pushNamed(context, Routes.LoginWithOTPPageRoutes);
+                                Navigator.pushNamed(context, Routes.LoginWithPhoneNumberRequestOTPPageRoutes);
                                 setState(() {
                                   isButtonPressedLoginwithphonenumber = !isButtonPressedLoginwithphonenumber;
                                 });

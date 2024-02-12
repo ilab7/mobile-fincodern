@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_fincopay/controllers/UserController.dart';
-import 'package:mobile_fincopay/pages/connexion/VerifyOTP.dart';
+import 'package:mobile_fincopay/pages/connexion/RequestOtpLoginWithPhonePage.dart';
 import 'package:mobile_fincopay/utils/Routes.dart';
 import 'package:mobile_fincopay/widgets/ChargementWidget.dart';
 import 'package:mobile_fincopay/widgets/EntryFieldMobileNumberWidgets.dart';
@@ -8,21 +8,25 @@ import 'package:mobile_fincopay/widgets/MessageWidgets.dart';
 import 'package:mobile_fincopay/widgets/ReusableButtonWidgets.dart';
 import 'package:provider/provider.dart';
 
-class LoginWithOTPPage extends StatefulWidget {
+class LoginWithPhoneNumberRequestOTPPage extends StatefulWidget {
   @override
-  State<LoginWithOTPPage> createState() => _LoginWithOTPPageState();
+  State<LoginWithPhoneNumberRequestOTPPage> createState() => _LoginWithPhoneNumberRequestOTPPageState();
 }
 
-class _LoginWithOTPPageState extends State<LoginWithOTPPage> {
+class _LoginWithPhoneNumberRequestOTPPageState extends State<LoginWithPhoneNumberRequestOTPPage> {
   bool iSButtonPressedSignIn = false;
   bool isButtonPressedRequestOTPtoLogin = false;
   bool isButtonPressedBacktologin = false;
-  var mobileNumber = TextEditingController();
+
+  var phone = TextEditingController();
+  String appName = 'FINCOPAY';
+
   var formKey = GlobalKey<FormState>();
   bool isVisible = false;
   bool isLoadingWaitingAPIResponse = false;
 
   List<TextEditingController> otpValue = [];
+  String? userId; // Declare the userId variable here
 
   void updateVariableCallback(List<TextEditingController> controllers) {
     otpValue = controllers;
@@ -104,7 +108,7 @@ class _LoginWithOTPPageState extends State<LoginWithOTPPage> {
 
                     SizedBox(height: MediaQuery.of(context).size.height * 0.035),
                     EntryFieldMobileNumberWidgets(
-                      ctrl: mobileNumber,
+                      ctrl: phone,
                       label: "Mobile Number",
                       required: true,
                       isMobileNumber: false,
@@ -113,7 +117,7 @@ class _LoginWithOTPPageState extends State<LoginWithOTPPage> {
                     ReusableButtonWidgets(
                       text: "Request OTP to login",
                       fontSize: 14,
-                      onPressed: isLoadingWaitingAPIResponse ? null :_handleSignUpPressed,
+                      onPressed: isLoadingWaitingAPIResponse ? null :_handleRequestOTPtoLoginPressed,
                       color: Color(0xFF336699),
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height * 0.12),
@@ -162,66 +166,44 @@ class _LoginWithOTPPageState extends State<LoginWithOTPPage> {
 
     var ctrl = context.read<UserController>();
     Map data = {
-      'mobile': mobileNumber.text,
+      "phone":phone.text, //The phone number is complete it's means : with Country Code ************************************
+      "appName":appName
     };
 
-    var response = await ctrl.SendOTPRequest(data);
+    print("DATA TO SEND JOSUE API TEST : ${phone.text}");
+    print("DATA TO SEND JOSUE API TEST : $appName");
+
+    var response = await ctrl.requestOTPPhoneNumber(data);
     await Future.delayed(Duration(seconds: 1));
 
     isVisible = false;
     setState(() {});
-    print(response.status);
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => VerifyOTP(
-          buttonText: 'Login',
-          updateVariableCallback: updateVariableCallback,
-          routeName: Routes.BottomNavigationPageRoutes,
-          onPressed: () {
-            //Navigator.popAndPushNamed(context, Routes.BottomNavigationPageRoutes);
-            Navigator.pushNamedAndRemoveUntil(context, Routes.BottomNavigationPageRoutes, ModalRoute.withName('/discoverpage'),);
-          },
-          onBackButtonPressed: () {
-            //Navigator.pop(context, Routes.LoginWithOTPPageRoutes);
-            Navigator.pushNamedAndRemoveUntil(context, Routes.LoginPageRoutes, ModalRoute.withName('/discoverpage'),);
-          },
-        ),
-      ),
-    ); //To delete after api connexion
+
+    userId = response.data?["data"]["userId"] ?? ''; // Here we take the UserId
+
     if (response.status) {
       await Future.delayed(Duration(seconds: 1));
       setState(() {});
-      Navigator.pushReplacement(
+      Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => VerifyOTP(
-            buttonText: 'Login',
-            updateVariableCallback: updateVariableCallback,
-            routeName: Routes.BottomNavigationPageRoutes,
-            onPressed: () {
-              //Navigator.popAndPushNamed(context, Routes.BottomNavigationPageRoutes);
-              Navigator.pushNamedAndRemoveUntil(context, Routes.BottomNavigationPageRoutes, ModalRoute.withName('/discoverpage'),);
-            },
-            onBackButtonPressed: () {
-              //Navigator.pop(context, Routes.LoginWithOTPPageRoutes);
-              Navigator.pushNamedAndRemoveUntil(context, Routes.LoginPageRoutes, ModalRoute.withName('/discoverpage'),);
-            },
-          ),
+          builder: (context) => RequestOtpLoginWithPhonePage(userId: userId, phone: phone.text,),
         ),
       );
+
     } else {
-      var msg =
-      response.isException == true ? response.errorMsg : (response.data?['message']);
+      var msg = response.isException == true ? response.errorMsg : (response.data?['message']);
       MessageWidgets.showSnack(context, msg);
     }
     setState(() {
       isLoadingWaitingAPIResponse = false;
     });
+
   }
 
-  void _handleSignUpPressed() async {
-    if (isLoadingWaitingAPIResponse) return;
+  void _handleRequestOTPtoLoginPressed() async {
+    if(isLoadingWaitingAPIResponse) return;
+
     setState(() {
       isLoadingWaitingAPIResponse = true;
     });

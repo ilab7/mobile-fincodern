@@ -73,7 +73,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                           InkWell(
                             onTap: () {
                               Navigator.pushNamed(
-                                  context, Routes.LoginWithOTPPageRoutes);
+                                  context, Routes.LoginWithPhoneNumberRequestOTPPageRoutes);
                               setState(() {
                                 isButtonPressedLoginwithphonenumber =
                                 !isButtonPressedLoginwithphonenumber;
