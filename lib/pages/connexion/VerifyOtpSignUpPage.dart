@@ -26,6 +26,7 @@ class _VerifyOtpSignUpPageState extends State<VerifyOtpSignUpPage> {
   var formKey = GlobalKey<FormState>();
   bool isVisible = false; // A flag to control the visibility of a loading widget
   bool isLoadingWaitingAPIResponse = false; // A flag to indicate if an API request is in progress
+  bool isLoadingWaitingAPIResponseOther = false; // A flag to indicate if an API request is in progress
 
   @override
   void initState() {
@@ -128,6 +129,29 @@ class _VerifyOtpSignUpPageState extends State<VerifyOtpSignUpPage> {
                       onPressed: isLoadingWaitingAPIResponse ? null : _handleVerifyOtpPressed,
                       color: Color(0xFF336699),
                     ),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                    TextButton(
+                      onPressed: /*isLoadingWaitingAPIResponse ? null : */_handleRequestAgainOTPtoSignUpPressed,
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                          EdgeInsets.symmetric(horizontal: 16.0),
+                        ),
+                        alignment: Alignment.centerRight,
+                        textStyle: MaterialStateProperty.all<TextStyle>(
+                          TextStyle(
+                            fontSize: 15,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                      ),
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          'Resend otp',
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -200,6 +224,8 @@ class _VerifyOtpSignUpPageState extends State<VerifyOtpSignUpPage> {
     isVisible = false;
     setState(() {});
 
+    print("VERIFY OTO PAGE USERID CONTENT : $userId");
+
     if (res.status) {
       await Future.delayed(Duration(seconds: 1));
       setState(() {});
@@ -226,6 +252,67 @@ class _VerifyOtpSignUpPageState extends State<VerifyOtpSignUpPage> {
 
     setState(() {
       isLoadingWaitingAPIResponse = false;
+    });
+  }
+
+  Future<void> RequestAgainOTPtoSignUp() async {
+    FocusScope.of(context).requestFocus(new FocusNode());
+    if (!formKey.currentState!.validate()) {
+      return;
+    }
+
+    isVisible = true;
+    setState(() {
+      isLoadingWaitingAPIResponseOther = true;
+    });
+
+    // Retrieve the OTP value from the controllers
+    otpValue = '';
+    for (var controller in _controllers) {
+      otpValue += controller.text;
+    }
+
+    var ctrl = context.read<UserController>();
+    Map<String, dynamic> data = {
+      'userId': userId, // Introduce the userId value here
+      'otp': otpValue, // Add the OTP value to the data map
+    };
+
+    var res = await ctrl.verifyOTPRequest(data);
+    await Future.delayed(Duration(seconds: 3));
+
+    isVisible = false;
+    setState(() {});
+
+    print("VERIFY OTO PAGE USERID CONTENT : $userId");
+
+    if (res.status) {
+      await Future.delayed(Duration(seconds: 3));
+      setState(() {});
+
+      Navigator.pushNamedAndRemoveUntil(context, Routes.LoginPageRoutes, ModalRoute.withName('/discoverpage'),);
+
+    } else {
+      var msg = res.isException == true ? res.errorMsg : (res.data?['message']);
+      MessageWidgets.showSnack(context, msg);
+    }
+    setState(() {
+      isLoadingWaitingAPIResponseOther = false;
+    });
+
+  }
+
+  void _handleRequestAgainOTPtoSignUpPressed() async {
+    if(isLoadingWaitingAPIResponseOther) return;
+
+    setState(() {
+      isLoadingWaitingAPIResponseOther = true;
+    });
+
+    await RequestAgainOTPtoSignUp();
+
+    setState(() {
+      isLoadingWaitingAPIResponseOther = false;
     });
   }
 

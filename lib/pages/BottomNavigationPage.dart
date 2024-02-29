@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_fincopay/controllers/UserController.dart';
+import 'package:provider/provider.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:mobile_fincopay/pages/home/HomePage.dart';
 import 'package:mobile_fincopay/pages/user/ProfilPage.dart';
@@ -17,6 +19,15 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
   Color selectedItem = Colors.orange;
   GetStorage box = GetStorage();
 
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      var userCtrl = context.read<UserController>();
+      userCtrl.getDataAPI();
+    });
+  }
+
   final pages = [
     HomePage(),
     ProfilPage(),
@@ -34,6 +45,7 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
   }
 
   Widget _bottomNavigation(){
+    var userCtrl = context.watch<UserController>();
     return Container(
       decoration: BoxDecoration(
         boxShadow: [

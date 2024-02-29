@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 import 'package:mobile_fincopay/utils/Constantes.dart';
 import '../apps/MonApplication.dart';
 
@@ -28,45 +29,36 @@ void printWrapped(String text) {
 
 Future<dynamic> getData(String url_api, {String? token}) async {
   try {
-    var url = Uri.parse("${Constantes.BASE_URL}$url_api");
-    var response = await http.get(url,
-      headers: {
-        "Authorization" : "Bearer ${token}"
-      }
-    ).timeout(Duration(seconds: 1));
+    var url = "${Constantes.BASE_URL}$url_api";
+    var dio = Dio();
+
+    int milliseconds = 10000;
+    Duration? duration = Duration(milliseconds: milliseconds);
+
+    dio.options.headers["Authorization"] = "Bearer $token";
+    dio.options.connectTimeout = duration; // 1 second
+
+    var response = await dio.get(url);
+    dio.interceptors.add(alice.getDioInterceptor());
+
+    print("BEHOLD THE ANSWER OF GETDATA API FUNCTION : $response");// To remove after
+
     if (response.statusCode == 200) {
-      print('BEHOLD TOKENNNNNNNNNNNNNNNNNNNNNNNN ::::::::: $token');
-      return json.decode(response.body);
+      if (response.data is String) {
+        return json.decode(response.data);
+      } else {
+        return response.data;
+      }
     }
+    //return json.decode(response.body);
     return null;
+
   } catch (e, trace) {
     print(e.toString());
     print(trace.toString());
+    print("Salut Mardochééééééééééééééééééééééééééééééééééééééé Voici le TOKEN : $token");
+    print("Salut Mardochééééééééééééééééééééééééééééééééééééééé Voici l'url : ${Constantes.BASE_URL}$url_api");
     return null;
-  }
-}
-
-Future<HttpResponse> patchData(String api_url, Map data, {String? token}) async {
-  try {
-    var url = Uri.parse("${Constantes.BASE_URL}$api_url");
-    String dataStr = json.encode(data);
-    var response = await http.patch(url, body: dataStr, headers: {
-      "Content-Type" : "application/json",
-      "Authorization" : "Bearer $token"
-    }).timeout(Duration(seconds: 1));
-
-    var successList = [200, 201];
-    var message = json.decode(response.body);
-    var status = successList.contains(response.statusCode);
-    return HttpResponse(status: status, data: message);
-  } catch (e, trace) {
-    print(e.toString());
-    print(trace.toString());
-
-    return HttpResponse(
-        status: false, errorMsg: "Something wrong happened !", isException: true
-    );
-
   }
 }
 
@@ -79,11 +71,13 @@ Future<HttpResponse> postData(String api_url, Map data, {String? token}) async {
     var response = await http.post(url, body: dataStr, headers: {
       "Content-Type": "application/json",
       "Authorization": "Bearer $_tkn"
-    }).timeout(Duration(seconds: 5));
+    }).timeout(Duration(seconds: 10));
 
-    if (!kReleaseMode) alice.onHttpResponse(response);
+    if (!kReleaseMode) {
+      alice.onHttpResponse(response);
+    }
+
     var successList = [200, 201];
-
     var msg = json.decode(response.body);
     var st = successList.contains(response.statusCode);
     if (response.statusCode == 500) throw Exception(msg);
@@ -106,37 +100,6 @@ Future<HttpResponse> sendOTP(String api_url, Map data, {String? token}) async {
     var response = await http.post(
       url,
       body: dataStr, headers: {
-      "Content-Type" : "application/json",
-      "Authorization" : "Bearer $token"
-    }).timeout(Duration(seconds: 1));
-
-    var successList = [200, 201];
-    var message = json.decode(response.body);
-    var status = successList.contains(response.statusCode);
-    if (response.statusCode == 500) throw Exception(message);
-    return HttpResponse(status: status, data: message);
-
-  } catch (e, trace) {
-    printWrapped(e.toString());
-    printWrapped(trace.toString());
-
-    return HttpResponse(
-        status: false,
-        errorMsg: "Something wrong happened !",
-        isException: true
-    );
-  }
-}
-
-Future<HttpResponse> verifyOTP(String api_url, Map data, {String? token}) async {
-  try{
-    var url = Uri.parse("${Constantes.BASE_URL}$api_url");
-    print("url mouvement === $url");
-
-    String dataStr = json.encode(data);
-    var response = await http.post(
-        url,
-        body: dataStr, headers: {
       "Content-Type" : "application/json",
       "Authorization" : "Bearer $token"
     }).timeout(Duration(seconds: 1));

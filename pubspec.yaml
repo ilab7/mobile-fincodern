@@ -45,6 +45,7 @@ dependencies:
   image_picker: ^1.0.4
   intl_phone_field: ^3.2.0
   gender_picker: ^1.1.0
+  dio: ^5.4.1
 
 dev_dependencies:
   flutter_test:

@@ -33,6 +33,7 @@ class _RequestOtpLoginWithPhonePageState extends State<RequestOtpLoginWithPhoneP
   var formKey = GlobalKey<FormState>();
   bool isVisible = false; // A flag to control the visibility of a loading widget
   bool isLoadingWaitingAPIResponse = false; // A flag to indicate if an API request is in progress
+  bool isLoadingWaitingAPIResponseOther = false; // A flag to indicate if an API request is in progress
 
   @override
   void initState() {
@@ -271,7 +272,7 @@ class _RequestOtpLoginWithPhonePageState extends State<RequestOtpLoginWithPhoneP
 
     isVisible = true;
     setState(() {
-      isLoadingWaitingAPIResponse = true;
+      isLoadingWaitingAPIResponseOther = true;
     });
 
     var ctrl = context.read<UserController>();
@@ -304,22 +305,22 @@ class _RequestOtpLoginWithPhonePageState extends State<RequestOtpLoginWithPhoneP
       MessageWidgets.showSnack(context, msg);
     }
     setState(() {
-      isLoadingWaitingAPIResponse = false;
+      isLoadingWaitingAPIResponseOther = false;
     });
 
   }
 
   void _handleRequestAgainOTPtoLoginPressed() async {
-    if(isLoadingWaitingAPIResponse) return;
+    if(isLoadingWaitingAPIResponseOther) return;
 
     setState(() {
-      isLoadingWaitingAPIResponse = true;
+      isLoadingWaitingAPIResponseOther = true;
     });
 
     await RequestAgainOTPtoLogin();
 
     setState(() {
-      isLoadingWaitingAPIResponse = false;
+      isLoadingWaitingAPIResponseOther = false;
     });
   }
 

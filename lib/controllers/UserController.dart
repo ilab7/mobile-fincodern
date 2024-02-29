@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'dart:core';
 import 'package:get_storage/get_storage.dart';
 import 'package:mobile_fincopay/models/UserModel.dart';
 import 'package:mobile_fincopay/utils/Endpoints.dart';
@@ -22,6 +23,11 @@ class UserController with ChangeNotifier {
 
   UserController({this.stockage});
 
+  void printWrapped(String text) {
+    final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
+    pattern.allMatches(text).forEach((match) => print(match.group(0)));
+  }
+
   Future<HttpResponse> register(Map data) async{
     var url = "${Endpoints.register}";
     HttpResponse response = await postData(url, data);
@@ -37,6 +43,7 @@ class UserController with ChangeNotifier {
     HttpResponse response = await postData(url, data);
     if (response.status) {
       stockage?.write(StockageKeys.tokenKey, response.data?["accessToken"] ?? "");
+      print("TOKEN LOGIN CONTROLLER ::::::::::::::::::: ${response.data?["accessToken"]}");
       notifyListeners();
     }
     return response;
@@ -48,8 +55,12 @@ class UserController with ChangeNotifier {
     loading = true;
     notifyListeners();
     var response = await getData(url, token: token);
-    if(response != null){
-      user = UserModel.fromJson(response.data?['data']['userId'] ?? {});
+    if (response != null && response is Map<String, dynamic>) {
+      if (response.containsKey("data")) {
+        user = UserModel.fromJson(response["data"] ?? {});
+        print("USER INFO ::::::::::::::::::: ${user?.fullName}");
+        printWrapped("PRINT WRAP DE RESPONSE.DATA : ${response["data"]}");
+      }
       notifyListeners();
     }
     loading = false;
@@ -58,8 +69,13 @@ class UserController with ChangeNotifier {
 
   Future<HttpResponse> logout(Map data) async{
     var url = "${Endpoints.logout}";
-    stockage?.read(StockageKeys.tokenKey);
-    HttpResponse response = await postData(url, data);
+    var tkn = stockage?.read(StockageKeys.tokenKey);
+    HttpResponse response = await postData(url, data, token: tkn);
+    if(response.status){
+      print("Successsssssssssssssssssssssssssss");
+      notifyListeners();
+    }
+    print(response.data);
     return response;
   }
 
@@ -67,9 +83,14 @@ class UserController with ChangeNotifier {
     var url = "${Endpoints.verifyOTP}";
     HttpResponse response = await postData(url, data);
     if (response.status) {
-      user = UserModel.fromJson(response.data?['user'] ?? {});
+      var userData = response.data?['user'];
+      if (userData != null) {
+        user = UserModel.fromJson(userData);
+      }
+      //user = UserModel.fromJson(response.data?['user'] ?? {});
       stockage?.write(StockageKeys.tokenKey, response.data?[""] ?? "");
       //stockage?.read(StockageKeys.tokenKey, response.data?['user']);
+      printWrapped("VERIFY OTP RESPONSE : $user");
       notifyListeners();
     }
     return response;

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:mobile_fincopay/controllers/UserController.dart';
 import 'package:mobile_fincopay/utils/Routes.dart';
-import 'package:mobile_fincopay/utils/StockageKeys.dart';
+import 'package:mobile_fincopay/widgets/ChargementWidget.dart';
+import 'package:mobile_fincopay/widgets/MessageWidgets.dart';
 import 'package:provider/provider.dart';
 
 class ProfilPage extends StatefulWidget {
@@ -19,11 +20,16 @@ class _ProfilPageState extends State<ProfilPage> {
   bool isLogOutButtonPressed = false;
   GetStorage box = GetStorage();
 
+  bool isVisible = false; // A flag to control the visibility of a loading widget
+  bool isLoadingWaitingAPIResponse = false; // A flag to indicate if an API request is in progress
+
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      var userCtrl = context.read<UserController>();
-      userCtrl.getDataAPI();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future.delayed(Duration.zero, () {
+        var userCtrl = context.read<UserController>();
+        userCtrl.getDataAPI();
+      });
     });
   }
 
@@ -54,6 +60,7 @@ class _ProfilPageState extends State<ProfilPage> {
                 ],
               ),
             ),
+            ChargementWidget(isVisible),
           ],
         ),
       ),
@@ -62,8 +69,6 @@ class _ProfilPageState extends State<ProfilPage> {
 
   Widget _body(){
     var userCtrl = context.watch<UserController>();
-    var token = box.read(StockageKeys.tokenKey);
-    print("TOKEN :::::::::::::::::::: $token");
 
     return ListView(
       shrinkWrap: true,
@@ -113,7 +118,7 @@ class _ProfilPageState extends State<ProfilPage> {
                               Container(
                                 padding: EdgeInsets.symmetric(horizontal: 16.0),
                                 child: Text(
-                                  '${userCtrl.user?.fullName==null ? "Name : Undefied" : userCtrl.user?.fullName}',
+                                  '${userCtrl.user?.fullName}',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: Colors.black,
@@ -284,17 +289,11 @@ class _ProfilPageState extends State<ProfilPage> {
               child: Text(
                 "Confirm",
                 style: TextStyle(
-                    color: isConfirmButtonPressed
-                        ? Color(0xFF0A0094)
-                        : Colors.orange,
+                    color: Colors.orange,
                     fontSize: 16),
               ),
               onPressed: () {
-                setState(() {});
-                var ctrl = context.read<UserController>();
-                Map data = {};
-                ctrl.logout(data);
-                Navigator.pushNamedAndRemoveUntil(context, Routes.LoginPageRoutes, ModalRoute.withName('/homepage'),);
+                isLoadingWaitingAPIResponse ? null : _handleLogoutPressed();
               },
             ),
           ],
@@ -305,6 +304,59 @@ class _ProfilPageState extends State<ProfilPage> {
       var message = !result ? "Logout canceled" : "Logged out";
       showSnackBar(context, message);
     }
+  }
+
+  Future<void> LogoutPressed() async {
+    if (!mounted) return; // Check if the widget is still mounted before calling setState()
+
+    isVisible = true;
+    setState(() {
+      isLoadingWaitingAPIResponse = true;
+    });
+
+    // Only access the context if the widget is still mounted
+    final BuildContext context = this.context;
+
+    var ctrl = context.read<UserController>();
+    Map data = {};
+
+    var response = await ctrl.logout(data);
+    await Future.delayed(Duration(seconds: 1));
+
+    isVisible = false;
+    setState(() {
+    });
+
+    if (response.status) {
+      await Future.delayed(Duration(seconds: 5));
+      setState(() {});
+      Navigator.pushNamedAndRemoveUntil(context, Routes.LoginPageRoutes, ModalRoute.withName('/homepage'),);
+
+      var msg = (response.data?['message']);
+      MessageWidgetsSuccess.showSnack(context, msg);
+
+    } else {
+      var msg = response.isException == true ? response.errorMsg : (response.data?['message']);
+      MessageWidgets.showSnack(context, msg, Colors.red);
+    }
+    setState(() {
+      isLoadingWaitingAPIResponse = false;
+    });
+
+  }
+
+  void _handleLogoutPressed() async {
+    if(isLoadingWaitingAPIResponse) return;
+
+    setState(() {
+      isLoadingWaitingAPIResponse = true;
+    });
+
+    await LogoutPressed();
+
+    setState(() {
+      isLoadingWaitingAPIResponse = false;
+    });
   }
 
   showSnackBar(context, String message) {
