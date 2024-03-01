@@ -3,6 +3,7 @@ import 'package:mobile_fincopay/controllers/UserController.dart';
 import 'package:mobile_fincopay/pages/connexion/VerifyOTP.dart';
 import 'package:mobile_fincopay/utils/Routes.dart';
 import 'package:mobile_fincopay/widgets/ChargementWidget.dart';
+import 'package:mobile_fincopay/widgets/CustomVisibilityWidget.dart';
 import 'package:mobile_fincopay/widgets/EntryFieldEmailWithValidateWidgets.dart';
 import 'package:mobile_fincopay/widgets/EntryFieldMobileNumberWithValidateWidgets.dart';
 import 'package:mobile_fincopay/widgets/MessageWidgets.dart';
@@ -30,6 +31,9 @@ class _FindYourAccountPageState extends State<FindYourAccountPage> {
   bool isVisible = false;
   var formKey = GlobalKey<FormState>();
   bool isLoadingWaitingAPIResponse = false;
+
+  //CustomVisibility Bloc variable
+  bool isCancelButtonVisible = false;
 
   var mobilephonenumber = TextEditingController();
   var emailWithValidate = TextEditingController();
@@ -128,7 +132,8 @@ class _FindYourAccountPageState extends State<FindYourAccountPage> {
                       EntryFieldMobileNumberWithValidateWidgets(
                         onChanged: (value) {
                           setState(() {
-                            isPhoneFilled = value.isNotEmpty;
+                            isPhoneFilled = !mobilephonenumber.text.isEmpty;
+                            //isPhoneFilled = value.isNotEmpty;
                             isEmailFilled = false;
                             mobileNumberoremailaddress.text = value; // Store the value in mobileNumberoremailaddress
                           });
@@ -182,6 +187,23 @@ class _FindYourAccountPageState extends State<FindYourAccountPage> {
                                   style: TextStyle(
                                     fontSize: 15,
                                   ),
+                                ),
+                              ),
+                            ),
+
+                            CustomVisibilityWidget(
+                              visible: isCancelButtonVisible,
+                              onPressed: () {
+                                setState(() {
+                                  isCancelButtonVisible = false;
+                                  isLoadingWaitingAPIResponse = false;
+                                });
+                              },
+                              child: Text(
+                                'Cancel query',
+                                textAlign: TextAlign.right,
+                                style: TextStyle(
+                                  color: Colors.red,
                                 ),
                               ),
                             ),
@@ -310,9 +332,10 @@ class _FindYourAccountPageState extends State<FindYourAccountPage> {
     if (isLoadingWaitingAPIResponse) return;
     setState(() {
       isLoadingWaitingAPIResponse = true;
+      isCancelButtonVisible = true;
     });
 
-    if (!validateFields()) {
+    if (!isPhoneFilled && !isEmailFilled) {
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -336,6 +359,7 @@ class _FindYourAccountPageState extends State<FindYourAccountPage> {
 
     setState(() {
       isLoadingWaitingAPIResponse = false;
+      isCancelButtonVisible = false;
     });
   }
 

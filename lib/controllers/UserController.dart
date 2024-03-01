@@ -99,8 +99,11 @@ class UserController with ChangeNotifier {
   Future<HttpResponse> requestOTPPhoneNumber(Map data) async {
     var url = "${Endpoints.login_with_phoneNumber}";
     HttpResponse response = await postData(url, data);
+    //printWrapped("REQUEST OTP : ${response.data}");
+    //print("TEST OF MY FUNCTIONNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN");
     if (response.status) {
       stockage?.write(StockageKeys.userKey, response.data?['data']['userId'] ?? {});
+      printWrapped("REQUEST OTP VOICI : ${response.data}");
       notifyListeners();
     }
     return response;

@@ -104,7 +104,7 @@ class _VerifyOtpSignUpPageState extends State<VerifyOtpSignUpPage> {
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 16.0),
                       child: Text(
-                        'Please enter the OTP sent to your email address or mobile phone number',
+                        'Please enter the OTP sent to your email address',
                         textAlign: TextAlign.left,
                         style: TextStyle(
                           fontSize: 15,

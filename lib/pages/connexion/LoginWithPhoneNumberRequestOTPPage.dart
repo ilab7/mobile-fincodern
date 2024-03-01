@@ -174,12 +174,14 @@ class _LoginWithPhoneNumberRequestOTPPageState extends State<LoginWithPhoneNumbe
     print("DATA TO SEND JOSUE API TEST : $appName");
 
     var response = await ctrl.requestOTPPhoneNumber(data);
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(Duration(seconds: 10));
 
     isVisible = false;
     setState(() {});
 
     userId = response.data?["data"]["userId"] ?? ''; // Here we take the UserId
+    print("USERID CHECKING  : $userId");
+
 
     if (response.status) {
       await Future.delayed(Duration(seconds: 1));

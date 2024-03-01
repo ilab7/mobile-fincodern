@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_fincopay/controllers/UserController.dart';
 import 'package:mobile_fincopay/utils/Routes.dart';
 import 'package:mobile_fincopay/widgets/ChargementWidget.dart';
+import 'package:mobile_fincopay/widgets/CustomVisibilityWidget.dart';
 import 'package:mobile_fincopay/widgets/EntryFieldPasswordWidgets.dart';
 import 'package:mobile_fincopay/widgets/EntryfieldConfirmWidgets.dart';
 import 'package:mobile_fincopay/widgets/MessageWidgets.dart';
@@ -22,6 +23,10 @@ class _CreateNewPasswordUpdatedPageState extends State<CreateNewPasswordUpdatedP
   var confirmPassword = TextEditingController();
   bool isLoadingWaitingAPIResponse = false;
   bool isVisible = false;
+
+  //CustomVisibility Bloc variable
+  bool isCancelButtonVisible = false;
+
   var formKey = GlobalKey<FormState>();
 
   @override
@@ -124,7 +129,24 @@ class _CreateNewPasswordUpdatedPageState extends State<CreateNewPasswordUpdatedP
                       onPressed: isLoadingWaitingAPIResponse ? null :_handleUpadatePasswordPressed,
                       color: Color(0xFF336699),
                     ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.06),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.005),
+                    CustomVisibilityWidget(
+                      visible: isCancelButtonVisible,
+                      onPressed: () {
+                        setState(() {
+                          isCancelButtonVisible = false;
+                          isLoadingWaitingAPIResponse = false;
+                        });
+                      },
+                      child: Text(
+                        'Cancel query',
+                        textAlign: TextAlign.right,
+                        style: TextStyle(
+                          color: Colors.red,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.04),
                   ],
                 ),
               ),
@@ -177,12 +199,14 @@ class _CreateNewPasswordUpdatedPageState extends State<CreateNewPasswordUpdatedP
     if(isLoadingWaitingAPIResponse) return;
     setState(() {
       isLoadingWaitingAPIResponse = true;
+      isCancelButtonVisible = true;
     });
 
     await UpdatePasswordPressed();
 
     setState(() {
       isLoadingWaitingAPIResponse = false;
+      isCancelButtonVisible = false;
     });
   }
 

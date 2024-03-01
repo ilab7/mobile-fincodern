@@ -3,6 +3,7 @@ import 'package:mobile_fincopay/controllers/UserController.dart';
 import 'package:mobile_fincopay/pages/connexion/VerifyOTP.dart';
 import 'package:mobile_fincopay/utils/Routes.dart';
 import 'package:mobile_fincopay/widgets/ChargementWidget.dart';
+import 'package:mobile_fincopay/widgets/CustomVisibilityWidget.dart';
 import 'package:mobile_fincopay/widgets/EntryFieldEmailWithValidateWidgets.dart';
 import 'package:mobile_fincopay/widgets/EntryFieldMobileNumberWithValidateWidgets.dart';
 import 'package:mobile_fincopay/widgets/MessageWidgets.dart';
@@ -25,6 +26,9 @@ class _ForgotYourPasswordState extends State<ForgotYourPassword> {
   bool isEmailFilled = false;
   bool isPhoneFilled = false;
   bool isLoadingWaitingAPIResponse = false;
+
+  //CustomVisibility Bloc variable
+  bool isCancelButtonVisible = false;
 
   bool isVisible = false;
   var formKey = GlobalKey<FormState>();
@@ -119,11 +123,10 @@ class _ForgotYourPasswordState extends State<ForgotYourPassword> {
                   EntryFieldMobileNumberWithValidateWidgets(
                     onChanged: (value) {
                       setState(() {
-                        if(value.isNotEmpty) {
-                          isPhoneFilled = true;
-                        } else {
-                          isPhoneFilled = false;
-                        }
+                        isPhoneFilled = !mobilephonenumber.text.isEmpty;
+                        //isPhoneFilled = value.isNotEmpty;
+                        isEmailFilled = false;
+                        mobileNumberoremailaddress.text = value; // Store the value in mobileNumberoremailaddress
                       });
                     },
                     readOnly: isEmailFilled,
@@ -137,11 +140,9 @@ class _ForgotYourPasswordState extends State<ForgotYourPassword> {
                   EntryFieldEmailWithValidateWidgets(
                     onChanged: (value) {
                       setState(() {
-                        if(value.isNotEmpty) {
-                          isEmailFilled = true;
-                        } else {
-                          isEmailFilled = false;
-                        }
+                        isEmailFilled = value.isNotEmpty;
+                        isPhoneFilled = false;
+                        mobileNumberoremailaddress.text = value; // Store the value in mobileNumberoremailaddress
                       });
                     },
                     readOnly: isPhoneFilled,
@@ -178,6 +179,23 @@ class _ForgotYourPasswordState extends State<ForgotYourPassword> {
                               style: TextStyle(
                                 fontSize: 15,
                               ),
+                            ),
+                          ),
+                        ),
+
+                        CustomVisibilityWidget(
+                          visible: isCancelButtonVisible,
+                          onPressed: () {
+                            setState(() {
+                              isCancelButtonVisible = false;
+                              isLoadingWaitingAPIResponse = false;
+                            });
+                          },
+                          child: Text(
+                            'Cancel query',
+                            textAlign: TextAlign.right,
+                            style: TextStyle(
+                              color: Colors.red,
                             ),
                           ),
                         ),
@@ -265,6 +283,7 @@ class _ForgotYourPasswordState extends State<ForgotYourPassword> {
     if (isLoadingWaitingAPIResponse) return;
     setState(() {
       isLoadingWaitingAPIResponse = true;
+      isCancelButtonVisible = true;
     });
 
     if (!validateFields()) {
@@ -291,6 +310,7 @@ class _ForgotYourPasswordState extends State<ForgotYourPassword> {
 
     setState(() {
       isLoadingWaitingAPIResponse = false;
+      isCancelButtonVisible = false;
     });
   }
 

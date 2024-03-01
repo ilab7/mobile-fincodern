@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_fincopay/controllers/UserController.dart';
 import 'package:mobile_fincopay/utils/Routes.dart';
 import 'package:mobile_fincopay/widgets/ChargementWidget.dart';
+import 'package:mobile_fincopay/widgets/CustomVisibilityWidget.dart';
 import 'package:mobile_fincopay/widgets/EntryFieldEmailWidgets.dart';
 import 'package:mobile_fincopay/widgets/EntryFieldPasswordWidgets.dart';
 import 'package:mobile_fincopay/widgets/MessageWidgets.dart';
@@ -20,6 +21,9 @@ class _LoginPageState extends State<LoginPage> {
   bool isButtonPressedSkipfornow = false;
   bool isButtonPressedForgotpassword = false;
   bool isButtonPressedFindyouraccount = false;
+
+  //CustomVisibility Bloc variable
+  bool isCancelButtonVisible = false;
 
   var email = TextEditingController();
   var password = TextEditingController();
@@ -256,7 +260,24 @@ class _LoginPageState extends State<LoginPage> {
                           ],
                         ),
                       ),
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.06),
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+                      CustomVisibilityWidget(
+                        visible: isCancelButtonVisible,
+                        onPressed: () {
+                          setState(() {
+                            isCancelButtonVisible = false;
+                            isLoadingWaitingAPIResponse = false;
+                          });
+                        },
+                        child: Text(
+                          'Cancel query',
+                          textAlign: TextAlign.right,
+                          style: TextStyle(
+                            color: Colors.red,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.04),
                     ],
                   ),
                 ),
@@ -309,12 +330,14 @@ class _LoginPageState extends State<LoginPage> {
     if(isLoadingWaitingAPIResponse) return;
     setState(() {
       isLoadingWaitingAPIResponse = true;
+      isCancelButtonVisible = true;
     });
 
     await LoginPressed();
 
     setState(() {
       isLoadingWaitingAPIResponse = false;
+      isCancelButtonVisible = false;
     });
   }
 }

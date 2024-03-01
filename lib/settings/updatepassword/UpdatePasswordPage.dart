@@ -3,6 +3,7 @@ import 'package:mobile_fincopay/controllers/UserController.dart';
 import 'package:mobile_fincopay/pages/connexion/VerifyOTP.dart';
 import 'package:mobile_fincopay/utils/Routes.dart';
 import 'package:mobile_fincopay/widgets/ChargementWidget.dart';
+import 'package:mobile_fincopay/widgets/CustomVisibilityWidget.dart';
 import 'package:mobile_fincopay/widgets/EntryFieldEmailWithValidateWidgets.dart';
 import 'package:mobile_fincopay/widgets/EntryFieldMobileNumberWithValidateWidgets.dart';
 import 'package:mobile_fincopay/widgets/MessageWidgets.dart';
@@ -24,6 +25,9 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
   bool isEmailFilled = false;
   bool isPhoneFilled = false;
   bool isLoadingWaitingAPIResponse = false;
+
+  //CustomVisibility Bloc variable
+  bool isCancelButtonVisible = false;
 
   bool isVisible = false;
   var formKey = GlobalKey<FormState>();
@@ -171,6 +175,23 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
                             ),
                           ),
                         ),
+
+                        CustomVisibilityWidget(
+                          visible: isCancelButtonVisible,
+                          onPressed: () {
+                            setState(() {
+                              isCancelButtonVisible = false;
+                              isLoadingWaitingAPIResponse = false;
+                            });
+                          },
+                          child: Text(
+                            'Cancel query',
+                            textAlign: TextAlign.right,
+                            style: TextStyle(
+                              color: Colors.red,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -255,6 +276,7 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
     if (isLoadingWaitingAPIResponse) return;
     setState(() {
       isLoadingWaitingAPIResponse = true;
+      isCancelButtonVisible = true;
     });
 
     if (!validateFields()) {
@@ -281,6 +303,7 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
 
     setState(() {
       isLoadingWaitingAPIResponse = false;
+      isCancelButtonVisible = false;
     });
   }
 

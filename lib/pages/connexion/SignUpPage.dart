@@ -3,6 +3,7 @@ import 'package:mobile_fincopay/controllers/UserController.dart';
 import 'package:mobile_fincopay/pages/connexion/VerifyOtpSignUpPage.dart';
 import 'package:mobile_fincopay/utils/Routes.dart';
 import 'package:mobile_fincopay/widgets/ChargementWidget.dart';
+import 'package:mobile_fincopay/widgets/CustomVisibilityWidget.dart';
 import 'package:mobile_fincopay/widgets/EntryFieldEmailWidgets.dart';
 import 'package:mobile_fincopay/widgets/EntryFieldMobileNumberWidgets.dart';
 import 'package:mobile_fincopay/widgets/EntryfieldConfirmWidgets.dart';
@@ -30,6 +31,9 @@ class _SignUpPageState extends State<SignUpPage> {
   var phone = TextEditingController();
   var fullname = TextEditingController();
   String appName = 'FINCOPAY';
+
+  //CustomVisibility Bloc variable
+  bool isCancelButtonVisible = false;
 
   var formKey = GlobalKey<FormState>();
   bool isVisible = false; // A flag to control the visibility of a loading widget
@@ -189,7 +193,23 @@ class _SignUpPageState extends State<SignUpPage> {
                         onPressed: isLoadingWaitingAPIResponse ? null :_handleSignUpPressed,
                         color: Color(0xFF336699),
                       ),
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.06),
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.005),
+                      CustomVisibilityWidget(
+                        visible: isCancelButtonVisible,
+                        onPressed: () {
+                          setState(() {
+                            isCancelButtonVisible = false;
+                            isLoadingWaitingAPIResponse = false;
+                          });
+                        },
+                        child: Text(
+                          'Cancel query',
+                          textAlign: TextAlign.right,
+                          style: TextStyle(
+                            color: Colors.red,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -262,16 +282,18 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   void _handleSignUpPressed() async {
-    if(isLoadingWaitingAPIResponse) return;
+    if (isLoadingWaitingAPIResponse) return;
 
     setState(() {
       isLoadingWaitingAPIResponse = true;
+      isCancelButtonVisible = true;
     });
 
     await SignUpPressed();
 
     setState(() {
       isLoadingWaitingAPIResponse = false;
+      isCancelButtonVisible = false;
     });
   }
 

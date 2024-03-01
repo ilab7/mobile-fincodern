@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile_fincopay/controllers/UserController.dart';
 import 'package:mobile_fincopay/widgets/ChargementWidget.dart';
+import 'package:mobile_fincopay/widgets/CustomVisibilityWidget.dart';
 import 'package:mobile_fincopay/widgets/EntryFieldEmailWidgets.dart';
 import 'package:mobile_fincopay/widgets/EntryFieldMobileNumberWidgets.dart';
 import 'package:mobile_fincopay/widgets/GenderWidget.dart';
@@ -27,6 +28,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
   var phone = TextEditingController();
   var fullname = TextEditingController();
   var address = TextEditingController();
+
+  //CustomVisibility Bloc variable
+  bool isCancelButtonVisible = false;
 
   bool isVisible = false;
   var formKey = GlobalKey<FormState>();
@@ -162,6 +166,23 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   onChanged: (Gender? gender) {
                     print(gender);
                   },
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+                CustomVisibilityWidget(
+                  visible: isCancelButtonVisible,
+                  onPressed: () {
+                    setState(() {
+                      isCancelButtonVisible = false;
+                      //isLoadingWaitingAPIResponse = false;
+                    });
+                  },
+                  child: Text(
+                    'Cancel query',
+                    textAlign: TextAlign.right,
+                    style: TextStyle(
+                      color: Colors.red,
+                    ),
+                  ),
                 ),
               ],
             ),

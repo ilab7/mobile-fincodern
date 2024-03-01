@@ -245,7 +245,7 @@ class _ProfilPageState extends State<ProfilPage> {
         ),
         ListTile(
           title: Text(
-            'Log out',
+            'Logout',
             style: TextStyle(
               fontSize: 15,
             ),
