@@ -157,14 +157,26 @@ class UserController with ChangeNotifier {
     return response;
   }
 
+  Future<HttpResponse> changePassword(Map data) async {
+    var url = "${Endpoints.changepassword}";
+    var tkn = stockage?.read(StockageKeys.tokenKey);
+    HttpResponse response = await postData(url, data, token: tkn);
+    print("I am outSide");
+    if (response.status) {
+      //stockage?.write(StockageKeys.userKey, response.data?['data']['userId'] ?? {});
+      print("I am succeddddddddddddddddddddddddddddddddddddddd");
+      notifyListeners();
+    }
+    return response;
+  }
+
   Future<HttpResponse> createNewPassword(Map data) async {
     var url = "${Endpoints.createNewPassword}";
     HttpResponse response = await postData(url, data);
     print("I am outSide");
     if (response.status) {
       stockage?.write(StockageKeys.userKey, response.data?['data'] ?? {});
-      //stockage?.write(StockageKeys.resetString, response.data?['data']['resetString'] ?? {});
-      print("Behold the response inside if of ctrl ${response.data?['data']}");
+      print("Password changed");
       notifyListeners();
     }
     return response;

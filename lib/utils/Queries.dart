@@ -71,7 +71,8 @@ Future<HttpResponse> postData(String api_url, Map data, {String? token}) async {
       "Content-Type": "application/json",
       "Authorization": "Bearer $_tkn"
     }).timeout(Duration(seconds: 10));
-     print("I word post data fnction");
+
+    print("JOSHUA TO SEE IF EVERYTHING GOES WELL : ${_tkn}");
     var successList = [200, 201];
     var msg = json.decode(response.body);
     var st = successList.contains(response.statusCode);

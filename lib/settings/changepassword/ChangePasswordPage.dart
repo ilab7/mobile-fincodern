@@ -4,18 +4,17 @@ import 'package:mobile_fincopay/utils/Routes.dart';
 import 'package:mobile_fincopay/widgets/ChargementWidget.dart';
 import 'package:mobile_fincopay/widgets/CustomVisibilityWidget.dart';
 import 'package:mobile_fincopay/widgets/EntryFieldPasswordWidgets.dart';
-import 'package:mobile_fincopay/widgets/EntryfieldConfirmWidgets.dart';
 import 'package:mobile_fincopay/widgets/MessageWidgets.dart';
 import 'package:mobile_fincopay/widgets/PasswordWithCriteriatWidgets.dart';
 import 'package:mobile_fincopay/widgets/ReusableButtonWidgets.dart';
 import 'package:provider/provider.dart';
 
-class CreateNewPasswordUpdatedPage extends StatefulWidget {
+class ChangePasswordPage extends StatefulWidget {
   @override
-  State<CreateNewPasswordUpdatedPage> createState() => _CreateNewPasswordUpdatedPageState();
+  State<ChangePasswordPage> createState() => _ChangePasswordPageState();
 }
 
-class _CreateNewPasswordUpdatedPageState extends State<CreateNewPasswordUpdatedPage> {
+class _ChangePasswordPageState extends State<ChangePasswordPage> {
   bool isButtonPressedUpdatePassword = false;
 
   var newPassword = TextEditingController();
@@ -60,7 +59,7 @@ class _CreateNewPasswordUpdatedPageState extends State<CreateNewPasswordUpdatedP
                         children: [
                           InkWell(
                             onTap: (){
-                              Navigator.pushReplacementNamed(context, Routes.UpdatePasswordPageRoutes);
+                              Navigator.pop(context);
                             },
                             child: Icon(
                               Icons.arrow_back_ios,
@@ -86,7 +85,7 @@ class _CreateNewPasswordUpdatedPageState extends State<CreateNewPasswordUpdatedP
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            'Update password',
+                            'Change password',
                             style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
@@ -114,17 +113,17 @@ class _CreateNewPasswordUpdatedPageState extends State<CreateNewPasswordUpdatedP
                       padding: const EdgeInsets.symmetric(horizontal: 18.0),
                       child: Align(alignment: Alignment.centerLeft, child: Text("Minimum 8 characters", style: TextStyle(fontSize: 11))),
                     ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+                    /*SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                     EntryFieldConfirmWidgets(
                       ctrl: confirmPassword,
                       password: newPassword,
                       label: "Confirm new password",
                       required: true,
                       isConfirm: false,
-                    ),
+                    ),*/
                     SizedBox(height: MediaQuery.of(context).size.height * 0.035),
                     ReusableButtonWidgets(
-                      text: "Update password",
+                      text: "Change password",
                       fontSize: 14,
                       onPressed: isLoadingWaitingAPIResponse ? null :_handleUpadatePasswordPressed,
                       color: Color(0xFF336699),
@@ -157,7 +156,7 @@ class _CreateNewPasswordUpdatedPageState extends State<CreateNewPasswordUpdatedP
     );
   }
 
-  Future<void> UpdatePasswordPressed() async {
+  Future<void> ChangePasswordPressed() async {
     FocusScope.of(context).requestFocus(new FocusNode());
     if (!formKey.currentState!.validate()) {
       return;
@@ -170,22 +169,22 @@ class _CreateNewPasswordUpdatedPageState extends State<CreateNewPasswordUpdatedP
 
     var ctrl = context.read<UserController>();
     Map data = {
-      "current password": newPassword.text,
-      "new password": currentPassword.text,
+      "currentPassword": currentPassword.text,
+      "newPassword": newPassword.text,
     };
 
-    var response = await ctrl.updateUserPasswordVerifyEmail(data);
-    await Future.delayed(Duration(seconds: 1));
+    var response = await ctrl.changePassword(data);
+    await Future.delayed(Duration(seconds: 3));
 
     isVisible = false;
     setState(() {});
 
-    //Navigator.pushNamedAndRemoveUntil(context, Routes.SettingsPageRoutes, ModalRoute.withName('/settingspage'),); //To remove after
-    Navigator.pushReplacementNamed(context, Routes.UpdatePasswordPageRoutes); //To remove after
     if (response.status) {
-      await Future.delayed(Duration(seconds: 1));
+      await Future.delayed(Duration(seconds: 3));
       setState(() {});
       Navigator.pushNamedAndRemoveUntil(context, Routes.SettingsPageRoutes, ModalRoute.withName('/settingspage'),);
+      var msg = (response.data?['message']);
+      MessageWidgetsSuccess.showSnack(context, msg);
     } else {
       var msg = response.isException == true ? response.errorMsg : (response.data?['message']);
       MessageWidgets.showSnack(context, msg);
@@ -202,22 +201,11 @@ class _CreateNewPasswordUpdatedPageState extends State<CreateNewPasswordUpdatedP
       isCancelButtonVisible = true;
     });
 
-    await UpdatePasswordPressed();
+    await ChangePasswordPressed();
 
     setState(() {
       isLoadingWaitingAPIResponse = false;
       isCancelButtonVisible = false;
     });
-  }
-
-  showSnackBar(context, String message) {
-    final scaffold = ScaffoldMessenger.of(context);
-    scaffold.showSnackBar(SnackBar(
-      content: Text(message),
-      action:
-      SnackBarAction(label: 'OK',
-          textColor: Colors.orange,
-          onPressed: scaffold.hideCurrentSnackBar),
-    ));
   }
 }

@@ -15,7 +15,7 @@ class Routes {
   static const String SettingsPageRoutes = "/settingspage";
   static const String NotificationsPageRoutes = "/notificationspage";
   static const String UpdatePasswordPageRoutes = "/updatepasswordpage";
-  static const String CreateNewPasswordUpdatedPageRoutes = "/createnewpasswordupdatedpage";
+  static const String ChangePasswordPageRoutes = "/changepasswordpage";
   static const String PasswordUpdatedPageRoutes = "/passwordupdatedpage";
   static const String EditProfilePageRoutes = "/editprofilepage";
   static const String VerifyOtpSignUpPageRoutes = "/verifyotpsignuppage";

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mobile_fincopay/pages/introduction/DiscoverPage.dart';
 import 'package:mobile_fincopay/pages/BottomNavigationPage.dart';
 import 'package:mobile_fincopay/pages/connexion/AccountFoundedPage.dart';
-import 'package:mobile_fincopay/pages/connexion/CreateNewPasswordPage.dart';
 import 'package:mobile_fincopay/pages/connexion/FindYourAccountPage.dart';
 import 'package:mobile_fincopay/pages/connexion/ForgotYourPasswordPage.dart';
 import 'package:mobile_fincopay/pages/connexion/LoginPage.dart';
@@ -17,8 +16,7 @@ import 'package:mobile_fincopay/pages/news/NotificationsPage.dart';
 import 'package:mobile_fincopay/pages/user/EditProfilePage.dart';
 import 'package:mobile_fincopay/pages/user/ProfilPage.dart';
 import 'package:mobile_fincopay/settings/SettingsPage.dart';
-import 'package:mobile_fincopay/settings/updatepassword/CreateNewPasswordUpdatedPage.dart';
-import 'package:mobile_fincopay/settings/updatepassword/UpdatePasswordPage.dart';
+import 'package:mobile_fincopay/settings/changepassword/ChangePasswordPage.dart';
 import 'Routes.dart';
 
 
@@ -70,11 +68,8 @@ class RoutesManager {
       case Routes.NotificationsPageRoutes:
         return MaterialPageRoute(builder: (_) => NotificationsPage());
 
-      case Routes.UpdatePasswordPageRoutes:
-        return MaterialPageRoute(builder: (_) => UpdatePasswordPage());
-
-      case Routes.CreateNewPasswordUpdatedPageRoutes:
-        return MaterialPageRoute(builder: (_) => CreateNewPasswordUpdatedPage());
+      case Routes.ChangePasswordPageRoutes:
+        return MaterialPageRoute(builder: (_) => ChangePasswordPage());
 
       case Routes.NavigationDrawerMenuRoutes:
         return MaterialPageRoute(builder: (_) => NavigationDrawerMenu());

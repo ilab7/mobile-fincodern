@@ -199,7 +199,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                     InkWell(
                       onTap: () {
-                        Navigator.pushNamed(context, Routes.UpdatePasswordPageRoutes);
+                        Navigator.pushNamed(context, Routes.ChangePasswordPageRoutes);
                       },
                       child: Column(
                         children: [
