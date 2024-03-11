@@ -10,9 +10,10 @@ import 'package:mobile_fincopay/widgets/ReusableButtonWidgets.dart';
 import 'package:provider/provider.dart';
 
 class CreateNewPasswordPage extends StatefulWidget {
+  final String? userId;
   final String? resetString;
 
-  const CreateNewPasswordPage({Key? key, required this.resetString}) : super(key: key);
+  const CreateNewPasswordPage({Key? key, required this.resetString, required this.userId}) : super(key: key);
 
   @override
   State<CreateNewPasswordPage> createState() => _CreateNewPasswordPageState();
@@ -20,6 +21,7 @@ class CreateNewPasswordPage extends StatefulWidget {
 
 class _CreateNewPasswordPageState extends State<CreateNewPasswordPage> {
   String? get resetString => widget.resetString;
+  String? get userId => widget.userId;
 
   bool isButtonPressedUpdatePassword = false;
 
@@ -64,7 +66,7 @@ class _CreateNewPasswordPageState extends State<CreateNewPasswordPage> {
                         children: [
                           InkWell(
                             onTap: (){
-                              Navigator.pop(context, Routes.LoginPageRoutes);
+                              Navigator.pop(context);
                             },
                             child: Icon(
                               Icons.arrow_back_ios,
@@ -168,9 +170,10 @@ class _CreateNewPasswordPageState extends State<CreateNewPasswordPage> {
 
     var ctrl = context.read<UserController>();
     Map data = {
+      'userId': userId, // Introduce the userId value here
       'resetString': resetString, // Introduce the userId value here
       'newPassword': newPassword.text,
-      'ConfirmnewPassword': confirmnewPassword.text,
+      'confirmNewPassword': confirmnewPassword.text,
     };
 
     var response = await ctrl.createNewPassword(data);
@@ -178,10 +181,11 @@ class _CreateNewPasswordPageState extends State<CreateNewPasswordPage> {
 
     isVisible = false;
     setState(() {});
-    print("The Status response after resgistered ${response.status}");
+    print("Voici The response data after createnewpassword ${response.data}");
+    print("BOTALA BILOKO NA ZO TINDA : ${data}");
     //Navigator.pushReplacementNamed(context, Routes.PasswordChangedPageRoutes);
     if (response.status) {
-      await Future.delayed(Duration(seconds: 1));
+      await Future.delayed(Duration(seconds: 5));
       setState(() {});
       Navigator.pushNamed(context, Routes.PasswordChangedPageRoutes);
       var msg = (response.data?['message']);

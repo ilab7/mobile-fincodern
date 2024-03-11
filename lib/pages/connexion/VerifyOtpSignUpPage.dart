@@ -131,7 +131,7 @@ class _VerifyOtpSignUpPageState extends State<VerifyOtpSignUpPage> {
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height * 0.05),
                     TextButton(
-                      onPressed: /*isLoadingWaitingAPIResponse ? null : */_handleRequestAgainOTPtoSignUpPressed,
+                      onPressed: isLoadingWaitingAPIResponse ? null : _handleRequestAgainOTPtoSignUpPressed,
                       style: ButtonStyle(
                         padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
                           EdgeInsets.symmetric(horizontal: 16.0),
@@ -218,7 +218,7 @@ class _VerifyOtpSignUpPageState extends State<VerifyOtpSignUpPage> {
       'otp': otpValue, // Add the OTP value to the data map
     };
 
-    var res = await ctrl.verifyOTPRequest(data);
+    var res = await ctrl.verifyOTPRequestSignUp(data);
     await Future.delayed(Duration(seconds: 1));
 
     isVisible = false;
@@ -278,7 +278,7 @@ class _VerifyOtpSignUpPageState extends State<VerifyOtpSignUpPage> {
       'otp': otpValue, // Add the OTP value to the data map
     };
 
-    var res = await ctrl.verifyOTPRequest(data);
+    var res = await ctrl.verifyOTPRequestSignUp(data);
     await Future.delayed(Duration(seconds: 3));
 
     isVisible = false;

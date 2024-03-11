@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'dart:async';
-import '../../utils/Routes.dart';
+import 'package:mobile_fincopay/utils/Routes.dart';
+import 'package:mobile_fincopay/controllers/UserController.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -11,8 +13,14 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    var userCtrl = context.read<UserController>();
+
     Timer(Duration(seconds: 2), () {
-      Navigator.pushReplacementNamed(context, Routes.OnBoardingPageRoutes);
+      if(userCtrl.isFirstTimeBienvenue){
+        Navigator.pushReplacementNamed(context, Routes.LoginPageRoutes);
+      } else {
+        Navigator.pushReplacementNamed(context, Routes.OnBoardingPageRoutes);
+      }
     });
   }
 

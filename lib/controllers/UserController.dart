@@ -96,6 +96,23 @@ class UserController with ChangeNotifier {
     return response;
   }
 
+  Future<HttpResponse> verifyOTPRequestSignUp(Map data) async {
+    var url = "${Endpoints.verifyOTPRegister}";
+    HttpResponse response = await postData(url, data);
+    if (response.status) {
+      var userData = response.data?['user'];
+      if (userData != null) {
+        user = UserModel.fromJson(userData);
+      }
+      //user = UserModel.fromJson(response.data?['user'] ?? {});
+      stockage?.write(StockageKeys.tokenKey, response.data?[""] ?? "");
+      //stockage?.read(StockageKeys.tokenKey, response.data?['user']);
+      printWrapped("VERIFY OTP RESPONSE : $user");
+      notifyListeners();
+    }
+    return response;
+  }
+
   Future<HttpResponse> requestOTPPhoneNumber(Map data) async {
     var url = "${Endpoints.login_with_phoneNumber}";
     HttpResponse response = await postData(url, data);
@@ -146,7 +163,8 @@ class UserController with ChangeNotifier {
     print("I am outSide");
     if (response.status) {
       stockage?.write(StockageKeys.userKey, response.data?['data'] ?? {});
-      print("I am insoide");
+      //stockage?.write(StockageKeys.resetString, response.data?['data']['resetString'] ?? {});
+      print("Behold the response inside if of ctrl ${response.data?['data']}");
       notifyListeners();
     }
     return response;

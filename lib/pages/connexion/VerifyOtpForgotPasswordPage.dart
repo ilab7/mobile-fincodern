@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mobile_fincopay/pages/connexion/AccountFoundedPage.dart';
 import 'package:mobile_fincopay/pages/connexion/CreateNewPasswordPage.dart';
 import 'package:provider/provider.dart';
 import 'package:mobile_fincopay/controllers/UserController.dart';
@@ -222,22 +221,29 @@ class _VerifyOtpForgotPasswordPageState extends State<VerifyOtpForgotPasswordPag
       'otp': otpValue, // Add the OTP value to the data map
     };
 
-    var res = await ctrl.verifyOTPRequest(data);
+    var response = await ctrl.verifyOTPRequest(data);
     await Future.delayed(Duration(seconds: 1));
 
     isVisible = false;
     setState(() {});
 
-    print("VERIFY OTO PAGE USERID CONTENT : $userId");
-
-    if (res.status) {
+    resetString = response.data?["data"]["resetString"] ?? ''; // Here we take the resetString
+    var userIdTsend = response.data?["data"]["userId"] ?? ''; // Here we take the userIdTsend to send
+    print("VERIFY OTO PAGE USERID CONTENT : $userIdTsend");
+    if (response.status) {
       await Future.delayed(Duration(seconds: 1));
       setState(() {});
-
-      Navigator.pushNamed(context, Routes.CreateNewPasswordPageRoutes);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => CreateNewPasswordPage(userId: userId, resetString: resetString,),
+        ),
+      );
+      var msg = (response.data?['message'] ?? "");
+      MessageWidgetsSuccess.showSnack(context, msg);
 
     } else {
-      var msg = res.isException == true ? res.errorMsg : (res.data?['message']);
+      var msg = response.isException == true ? response.errorMsg : (response.data?['message']);
       MessageWidgets.showSnack(context, msg);
     }
     setState(() {
@@ -298,20 +304,10 @@ class _VerifyOtpForgotPasswordPageState extends State<VerifyOtpForgotPasswordPag
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => CreateNewPasswordPage(resetString: resetString),
+          builder: (context) => CreateNewPasswordPage(userId: userId, resetString: resetString),
         ),
       );
       var msg = (res.data?['message'] ?? "");
-      MessageWidgetsSuccess.showSnack(context, msg);
-
-    }
-
-    if (res.status) {
-      await Future.delayed(Duration(seconds: 3));
-      setState(() {});
-
-      Navigator.pushNamed(context, Routes.AccountFoundedPageRoutes);
-      var msg = (res.data?['message']);
       MessageWidgetsSuccess.showSnack(context, msg);
 
     } else {

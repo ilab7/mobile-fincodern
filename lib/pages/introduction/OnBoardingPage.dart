@@ -16,7 +16,7 @@ class OnBoardingPage extends StatefulWidget {
 
 class OnBoardingPageState extends State<OnBoardingPage> {
 
-  @override
+  /*@override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -29,15 +29,15 @@ class OnBoardingPageState extends State<OnBoardingPage> {
 
   isFirstTimeBienvenueNavigate(){
     Navigator.popAndPushNamed(context, Routes.DiscoverPageRoutes);
-  }
+  }*/
 
   final introKey = GlobalKey<IntroductionScreenState>();
 
   void _onIntroEnd(context) {
-    /*Navigator.of(context).pushReplacement(
+    Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (_) => DiscoverPage()),
-    );*/
-    isFirstTimeBienvenueNavigate();
+    );
+    //isFirstTimeBienvenueNavigate();
   }
 
   Widget _buildFullscreenImage() {

@@ -28,7 +28,7 @@ class _PasswordChangedPageState extends State<PasswordChangedPage> {
                         children: [
                           InkWell(
                             onTap: (){
-                              Navigator.pop(context, Routes.LoginPageRoutes);
+                              Navigator.pushNamedAndRemoveUntil(context, Routes.LoginPageRoutes, ModalRoute.withName('/createnewpassword'),);
                             },
                             child: Icon(
                               Icons.arrow_back_ios,
@@ -89,7 +89,7 @@ class _PasswordChangedPageState extends State<PasswordChangedPage> {
                       text: "Back to login",
                       fontSize: 14,
                       onPressed: (){
-                        Navigator.pop(context, Routes.LoginPageRoutes);
+                        Navigator.pushNamedAndRemoveUntil(context, Routes.LoginPageRoutes, ModalRoute.withName('/createnewpassword'),);
                       },
                       color: Color(0xFF336699),
                     ),
