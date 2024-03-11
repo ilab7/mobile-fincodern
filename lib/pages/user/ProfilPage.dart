@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:mobile_fincopay/controllers/UserController.dart';
+import 'package:mobile_fincopay/settings/SettingsPage.dart';
 import 'package:mobile_fincopay/utils/Routes.dart';
 import 'package:mobile_fincopay/widgets/ChargementWidget.dart';
 import 'package:mobile_fincopay/widgets/MessageWidgets.dart';
@@ -148,7 +149,7 @@ class _ProfilPageState extends State<ProfilPage> {
               ),
               SizedBox(width: MediaQuery.of(context).size.width * 0.04),
               Text(
-                "${userCtrl.user?.phone == null ? "Phone : Undefied" : userCtrl.user?.phone}",
+                "${userCtrl.user?.phone == null ? "Phone : ${CircularProgressIndicator(color: Colors.orange,)}" : userCtrl.user?.phone}",
                 style: TextStyle(
                   fontSize: 15,
                 ),
@@ -167,7 +168,7 @@ class _ProfilPageState extends State<ProfilPage> {
               ),
               SizedBox(width: MediaQuery.of(context).size.width * 0.04),
               Text(
-                "${userCtrl.user?.email == null ? "Email : Undefeid" : userCtrl.user?.email}",
+                "${userCtrl.user?.email == null ? "Email : ${CircularProgressIndicator(color: Colors.orange,)}" : userCtrl.user?.email}",
                 style: TextStyle(
                   fontSize: 15,
                 ),
@@ -236,6 +237,13 @@ class _ProfilPageState extends State<ProfilPage> {
           ),
           onTap: () {
             showSnackBar(context, "Available soon !");
+          },
+        ),
+        ListTile(
+          leading: Icon(Icons.settings_outlined),
+          title: Text('Settings'),
+          onTap: (){
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => SettingsPage()));
           },
         ),
         Container(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_fincopay/introduction/DiscoverPage.dart';
-import 'package:mobile_fincopay/introduction/SplashScreen.dart';
+import 'package:mobile_fincopay/pages/introduction/DiscoverPage.dart';
 import 'package:mobile_fincopay/pages/BottomNavigationPage.dart';
 import 'package:mobile_fincopay/pages/connexion/AccountFoundedPage.dart';
 import 'package:mobile_fincopay/pages/connexion/CreateNewPasswordPage.dart';
@@ -10,8 +9,10 @@ import 'package:mobile_fincopay/pages/connexion/LoginPage.dart';
 import 'package:mobile_fincopay/pages/connexion/LoginWithPhoneNumberRequestOTPPage.dart';
 import 'package:mobile_fincopay/pages/connexion/PasswordChangedPage.dart';
 import 'package:mobile_fincopay/pages/connexion/SignUpPage.dart';
-import 'package:mobile_fincopay/pages/home/HomePage.dart';
+import 'package:mobile_fincopay/pages/home/MyHomePage.dart';
 import 'package:mobile_fincopay/pages/home/NavigationDrawerMenu.dart';
+import 'package:mobile_fincopay/pages/introduction/OnBoardingPage.dart';
+import 'package:mobile_fincopay/pages/introduction/SplashScreen.dart';
 import 'package:mobile_fincopay/pages/news/NotificationsPage.dart';
 import 'package:mobile_fincopay/pages/user/EditProfilePage.dart';
 import 'package:mobile_fincopay/pages/user/ProfilPage.dart';
@@ -48,8 +49,8 @@ class RoutesManager {
       case Routes.ForgotYourPasswordPageRoutes:
         return MaterialPageRoute(builder: (_) => ForgotYourPassword());
 
-      case Routes.CreateNewPasswordPageRoutes:
-        return MaterialPageRoute(builder: (_) => CreateNewPasswordPage());
+      /*case Routes.CreateNewPasswordPageRoutes:
+        return MaterialPageRoute(builder: (_) => CreateNewPasswordPage());*/
 
       case Routes.PasswordChangedPageRoutes:
         return MaterialPageRoute(builder: (_) => PasswordChangedPage());
@@ -58,7 +59,7 @@ class RoutesManager {
         return MaterialPageRoute(builder: (_) => BottomNavigationPage());
 
       case Routes.HomePageRoutes:
-        return MaterialPageRoute(builder: (_) => HomePage());
+        return MaterialPageRoute(builder: (_) => MyHomePage());
 
       case Routes.ProfilPageRoutes:
         return MaterialPageRoute(builder: (_) => ProfilPage());
@@ -83,6 +84,9 @@ class RoutesManager {
 
       case Routes.EditProfilePageRoutes:
         return MaterialPageRoute(builder: (_) => EditProfilePage());
+
+      case Routes.OnBoardingPageRoutes:
+        return MaterialPageRoute(builder: (_) => OnBoardingPage());
 
       default:
         return null;

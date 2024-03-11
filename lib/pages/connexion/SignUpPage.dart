@@ -210,6 +210,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           ),
                         ),
                       ),
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.03),
                     ],
                   ),
                 ),
@@ -233,8 +234,8 @@ class _SignUpPageState extends State<SignUpPage> {
 
     //Function to extract the contry code from the phone number
     String extractFirstFourLetters(String input) {
-      if (input.length >= 4) {
-        return input.substring(0, 4);
+      if (input.length >= 5) {
+        return input.substring(0, 5);
       } else {
         return input;
       }
@@ -250,7 +251,7 @@ class _SignUpPageState extends State<SignUpPage> {
       'password': password.text,
       'confirmPassword': confirm.text,
       'appName': appName,
-      'roles':'user',
+      //'roles':'user',
     };
 
     var response = await ctrl.register(data);
@@ -270,6 +271,8 @@ class _SignUpPageState extends State<SignUpPage> {
           builder: (context) => VerifyOtpSignUpPage(userId: userId),
         ),
       );
+      var msg = (response.data?['message'] ?? "");
+      MessageWidgetsSuccess.showSnack(context, msg);
 
     } else {
       var msg = response.isException == true ? response.errorMsg : (response.data?['message']);

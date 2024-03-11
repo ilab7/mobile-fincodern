@@ -63,7 +63,7 @@ class _VerifyOtpSignUpPageState extends State<VerifyOtpSignUpPage> {
                         children: [
                           InkWell(
                             onTap: (){
-                              Navigator.pop(context, Routes.SignUpPagePageRoutes);
+                              Navigator.pushNamed(context, Routes.SignUpPagePageRoutes);
                             },
                             child: Icon(
                               Icons.arrow_back_ios,
@@ -291,6 +291,8 @@ class _VerifyOtpSignUpPageState extends State<VerifyOtpSignUpPage> {
       setState(() {});
 
       Navigator.pushNamedAndRemoveUntil(context, Routes.LoginPageRoutes, ModalRoute.withName('/discoverpage'),);
+      var msg = (res.data?['message']);
+      MessageWidgetsSuccess.showSnack(context, msg);
 
     } else {
       var msg = res.isException == true ? res.errorMsg : (res.data?['message']);

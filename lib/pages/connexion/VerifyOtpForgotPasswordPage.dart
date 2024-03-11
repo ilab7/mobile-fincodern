@@ -1,32 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mobile_fincopay/pages/connexion/AccountFoundedPage.dart';
+import 'package:mobile_fincopay/pages/connexion/CreateNewPasswordPage.dart';
 import 'package:provider/provider.dart';
 import 'package:mobile_fincopay/controllers/UserController.dart';
 import 'package:mobile_fincopay/utils/Routes.dart';
 import 'package:mobile_fincopay/widgets/MessageWidgets.dart';
 import 'package:mobile_fincopay/widgets/ReusableButtonWidgets.dart';
 
-class RequestOtpLoginWithPhonePage extends StatefulWidget {
+class VerifyOtpForgotPasswordPage extends StatefulWidget {
   final String? userId;
-  final String? phone;
 
-  const RequestOtpLoginWithPhonePage({Key? key, required this.userId, required this.phone}) : super(key: key);
+  const VerifyOtpForgotPasswordPage({Key? key, required this.userId}) : super(key: key);
 
   @override
-  _RequestOtpLoginWithPhonePageState createState() => _RequestOtpLoginWithPhonePageState();
+  _VerifyOtpForgotPasswordPageState createState() => _VerifyOtpForgotPasswordPageState();
 }
 
-class _RequestOtpLoginWithPhonePageState extends State<RequestOtpLoginWithPhonePage> {
+class _VerifyOtpForgotPasswordPageState extends State<VerifyOtpForgotPasswordPage> {
   String? get userId => widget.userId;
-  String? get phone => widget.phone;
-  var IdUser;
-
-  String appName = 'FINCOPAY';
 
   late List<TextEditingController> _controllers;
   late String otpValue;
 
-  String? userIdd; // Declare the userId variable here
+  String? resetString; // Declare the userId variable here
 
   late int _numberOfDigits;
 
@@ -63,14 +60,14 @@ class _RequestOtpLoginWithPhonePageState extends State<RequestOtpLoginWithPhoneP
                 padding: EdgeInsets.all(09.0),
                 child: Column(
                   children: [
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.12),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.14),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 16.0),
                       child: Row(
                         children: [
                           InkWell(
                             onTap: (){
-                              Navigator.pushNamed(context, Routes.LoginWithPhoneNumberRequestOTPPageRoutes);
+                              Navigator.pop(context, Routes.ForgotYourPasswordPageRoutes);
                             },
                             child: Icon(
                               Icons.arrow_back_ios,
@@ -90,7 +87,7 @@ class _RequestOtpLoginWithPhonePageState extends State<RequestOtpLoginWithPhoneP
                         ],
                       ),
                     ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.14),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.135),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 16.0),
                       child: Row(
@@ -111,7 +108,7 @@ class _RequestOtpLoginWithPhonePageState extends State<RequestOtpLoginWithPhoneP
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 16.0),
                       child: Text(
-                        'Please enter the OTP sent to your mobile phone number',
+                        'Please enter the OTP sent to your email address',
                         textAlign: TextAlign.left,
                         style: TextStyle(
                           fontSize: 15,
@@ -138,7 +135,7 @@ class _RequestOtpLoginWithPhonePageState extends State<RequestOtpLoginWithPhoneP
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height * 0.05),
                     TextButton(
-                      onPressed: isLoadingWaitingAPIResponse ? null : _handleRequestAgainOTPtoLoginPressed,
+                      onPressed: /*isLoadingWaitingAPIResponse ? null : */_handleRequestAgainOTPtoSignUpPressed,
                       style: ButtonStyle(
                         padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
                           EdgeInsets.symmetric(horizontal: 16.0),
@@ -201,6 +198,7 @@ class _RequestOtpLoginWithPhonePageState extends State<RequestOtpLoginWithPhoneP
     );
   }
 
+
   Future<void> VerifyOtpPressed() async {
     FocusScope.of(context).requestFocus(new FocusNode());
     if (!formKey.currentState!.validate()) {
@@ -218,28 +216,25 @@ class _RequestOtpLoginWithPhonePageState extends State<RequestOtpLoginWithPhoneP
       otpValue += controller.text;
     }
 
-    IdUser = userId;
-
     var ctrl = context.read<UserController>();
     Map<String, dynamic> data = {
-      'userId': IdUser, // Introduce the userId value here
+      'userId': userId, // Introduce the userId value here
       'otp': otpValue, // Add the OTP value to the data map
     };
 
-    var res = await ctrl.requestOTPPhoneNumber(data);
+    var res = await ctrl.verifyOTPRequest(data);
     await Future.delayed(Duration(seconds: 1));
 
     isVisible = false;
     setState(() {});
 
-    print("ELEMENTS TO SEND AS OTP : $IdUser");
-    print("ELEMENTS TO SEND AS OTP : $otpValue");
+    print("VERIFY OTO PAGE USERID CONTENT : $userId");
 
     if (res.status) {
       await Future.delayed(Duration(seconds: 1));
       setState(() {});
 
-      Navigator.pushNamedAndRemoveUntil(context, Routes.BottomNavigationPageRoutes, ModalRoute.withName('/discoverpage'),);
+      Navigator.pushNamed(context, Routes.CreateNewPasswordPageRoutes);
 
     } else {
       var msg = res.isException == true ? res.errorMsg : (res.data?['message']);
@@ -264,7 +259,7 @@ class _RequestOtpLoginWithPhonePageState extends State<RequestOtpLoginWithPhoneP
     });
   }
 
-  Future<void> RequestAgainOTPtoLogin() async {
+  Future<void> RequestAgainOTPtoForgotPassword() async {
     FocusScope.of(context).requestFocus(new FocusNode());
     if (!formKey.currentState!.validate()) {
       return;
@@ -275,37 +270,52 @@ class _RequestOtpLoginWithPhonePageState extends State<RequestOtpLoginWithPhoneP
       isLoadingWaitingAPIResponseOther = true;
     });
 
+    // Retrieve the OTP value from the controllers
+    otpValue = '';
+    for (var controller in _controllers) {
+      otpValue += controller.text;
+    }
+
     var ctrl = context.read<UserController>();
-    Map data = {
-      "phone": phone,
-      "appName": appName
+    Map<String, dynamic> data = {
+      'userId': userId, // Introduce the userId value here
+      'otp': otpValue, // Add the OTP value to the data map
     };
 
-    var response = await ctrl.ResendOTPForLoginWithPhoneNumber(data);//Change Function Resend
-    await Future.delayed(Duration(seconds: 1));
+    var res = await ctrl.verifyOTPRequest(data);
+    await Future.delayed(Duration(seconds: 3));
 
     isVisible = false;
     setState(() {});
 
-    print("DATA TO SEND JOSUE API TEST : ${phone}");
-    print("DATA TO SEND JOSUE API TEST : $appName");
+    print("VERIFY OTO PAGE USERID CONTENT : $userId");
 
-    userIdd = response.data?["data"]["userId"] ?? ''; // Here we update the userId value
-
-    if (response.status) {
-      await Future.delayed(Duration(seconds: 1));
+    resetString = res.data?["data"]["resetString"] ?? ''; // Here we take the UserId
+    print("VERIFY OTO PAGE USERID CONTENT : $resetString");
+    if (res.status) {
+      await Future.delayed(Duration(seconds: 3));
       setState(() {});
-
-      IdUser = userIdd; //Here we are updating the IdUser variable to userIdd
-      // We are passing by IdUser variable because we can not modified a setter (userId with is Final)
-      Navigator.pushNamedAndRemoveUntil(context, Routes.LoginPageRoutes, ModalRoute.withName('/discoverpage'),);
-      var msg = (response.data?['message']);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => CreateNewPasswordPage(resetString: resetString),
+        ),
+      );
+      var msg = (res.data?['message'] ?? "");
       MessageWidgetsSuccess.showSnack(context, msg);
 
-      print("THIS IS VALUE OF IdUser : ${IdUser}");
+    }
+
+    if (res.status) {
+      await Future.delayed(Duration(seconds: 3));
+      setState(() {});
+
+      Navigator.pushNamed(context, Routes.AccountFoundedPageRoutes);
+      var msg = (res.data?['message']);
+      MessageWidgetsSuccess.showSnack(context, msg);
 
     } else {
-      var msg = response.isException == true ? response.errorMsg : (response.data?['message']);
+      var msg = res.isException == true ? res.errorMsg : (res.data?['message']);
       MessageWidgets.showSnack(context, msg);
     }
     setState(() {
@@ -314,14 +324,14 @@ class _RequestOtpLoginWithPhonePageState extends State<RequestOtpLoginWithPhoneP
 
   }
 
-  void _handleRequestAgainOTPtoLoginPressed() async {
+  void _handleRequestAgainOTPtoSignUpPressed() async {
     if(isLoadingWaitingAPIResponseOther) return;
 
     setState(() {
       isLoadingWaitingAPIResponseOther = true;
     });
 
-    await RequestAgainOTPtoLogin();
+    await RequestAgainOTPtoForgotPassword();
 
     setState(() {
       isLoadingWaitingAPIResponseOther = false;

@@ -318,6 +318,9 @@ class _FindYourAccountPageState extends State<FindYourAccountPage> {
           ),
         ),
       );
+      var msg = (response.data?['message']);
+      MessageWidgetsSuccess.showSnack(context, msg);
+
     } else {
       var msg =
       response.isException == true ? response.errorMsg : (response.data?['message']);

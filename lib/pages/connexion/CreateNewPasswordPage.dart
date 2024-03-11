@@ -10,15 +10,21 @@ import 'package:mobile_fincopay/widgets/ReusableButtonWidgets.dart';
 import 'package:provider/provider.dart';
 
 class CreateNewPasswordPage extends StatefulWidget {
+  final String? resetString;
+
+  const CreateNewPasswordPage({Key? key, required this.resetString}) : super(key: key);
+
   @override
   State<CreateNewPasswordPage> createState() => _CreateNewPasswordPageState();
 }
 
 class _CreateNewPasswordPageState extends State<CreateNewPasswordPage> {
+  String? get resetString => widget.resetString;
+
   bool isButtonPressedUpdatePassword = false;
 
   var newPassword = TextEditingController();
-  var confirmPassword = TextEditingController();
+  var confirmnewPassword = TextEditingController();
   bool isLoadingWaitingAPIResponse = false;
   bool isVisible = false;
 
@@ -109,7 +115,7 @@ class _CreateNewPasswordPageState extends State<CreateNewPasswordPage> {
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height * 0.03),
                     EntryFieldConfirmWidgets(
-                      ctrl: confirmPassword,
+                      ctrl: confirmnewPassword,
                       password: newPassword,
                       label: "Confirm new password",
                       required: true,
@@ -162,20 +168,25 @@ class _CreateNewPasswordPageState extends State<CreateNewPasswordPage> {
 
     var ctrl = context.read<UserController>();
     Map data = {
+      'resetString': resetString, // Introduce the userId value here
       'newPassword': newPassword.text,
+      'ConfirmnewPassword': confirmnewPassword.text,
     };
 
-    var response = await ctrl.updateUserPassword(data);
+    var response = await ctrl.createNewPassword(data);
     await Future.delayed(Duration(seconds: 1));
 
     isVisible = false;
     setState(() {});
     print("The Status response after resgistered ${response.status}");
-    Navigator.pushReplacementNamed(context, Routes.PasswordChangedPageRoutes);
+    //Navigator.pushReplacementNamed(context, Routes.PasswordChangedPageRoutes);
     if (response.status) {
       await Future.delayed(Duration(seconds: 1));
       setState(() {});
-      Navigator.pushReplacementNamed(context, Routes.PasswordChangedPageRoutes);
+      Navigator.pushNamed(context, Routes.PasswordChangedPageRoutes);
+      var msg = (response.data?['message']);
+      MessageWidgetsSuccess.showSnack(context, msg);
+
     } else {
       var msg = response.isException == true ? response.errorMsg : (response.data?['message']);
       MessageWidgets.showSnack(context, msg);

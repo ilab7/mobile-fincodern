@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
 import 'package:mobile_fincopay/utils/Constantes.dart';
@@ -72,26 +71,110 @@ Future<HttpResponse> postData(String api_url, Map data, {String? token}) async {
       "Content-Type": "application/json",
       "Authorization": "Bearer $_tkn"
     }).timeout(Duration(seconds: 10));
-
-    if (!kReleaseMode) {
-      alice.onHttpResponse(response);
-    }
-
+     print("I word post data fnction");
     var successList = [200, 201];
     var msg = json.decode(response.body);
     var st = successList.contains(response.statusCode);
     if (response.statusCode == 500) throw Exception(msg);
-
+    printWrapped("BEHOLD THE INTERE RESPOSE : ${response.body}");
     return HttpResponse(status: st, data: msg);
   } catch (e, trace) {
     printWrapped(e.toString());
     printWrapped(trace.toString());
+    print("Something wrong post data");
+
     return HttpResponse(
         status: false,
         errorMsg: "Unexpected error, connexion's problem",
         isException: true);
   }
 }
+
+Future<HttpResponse> updateData(String endpoint, Map data, {String? token}) async {
+  try {
+    final url = "${Constantes.BASE_URL}$endpoint";
+    final jsonData = json.encode(data);
+
+    final response = await http.put(
+      Uri.parse(url),
+      headers: {
+        "Authorization": "Bearer $token",
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: jsonData,
+    );
+
+    printWrapped("VOICI JOSUE UPDATE ${response.body}");
+    final successList = [200, 201];
+    final message = json.decode(response.body);
+    final status = successList.contains(response.statusCode);
+
+    if (response.statusCode == 500) {
+      throw Exception(message);
+    }
+    print("I AME THE updateData FONCTION");
+    print("I AME THE updateData FONCTION BEHOLD THE TOKEN : $token");
+    printWrapped("I AME THE updateData FONCTION BEHOLD THE RESPONSE : ${response.body}");
+    return HttpResponse(status: status, data: message);
+  } catch (e, trace) {
+    printWrapped(e.toString());
+    printWrapped(trace.toString());
+    print("I AME THE updateData FONCTION BUT INSIDE CATCH WHAT IS HAPPENING ?");
+
+    return HttpResponse(
+      status: false,
+      errorMsg: "Something wrong happened!",
+      isException: true,
+    );
+  }
+}
+
+
+/*Future<dynamic> updateData(String endpoint, Map data, {String? token}) async {
+  final dio = Dio();
+
+  try{
+    final url = "${Constantes.BASE_URL}$endpoint";
+    var _tkn = token;
+
+    String jsonData = json.encode(data);
+
+    final response = await dio.put(url, data: jsonData,
+      options: Options(
+        followRedirects: false,
+        contentType: "application/json",
+        headers: {
+          'Authorization':'Bearer $_tkn',
+          "Accept" : "application/json"
+        },
+      ),
+    );
+
+    var successList = [200, 201];
+    var msg = json.decode(response.data);
+    var st = successList.contains(response.statusCode);
+    if (response.statusCode == 500) throw Exception(msg);
+
+    printWrapped(response.toString());
+
+    return HttpResponse(status: st, data: msg); // {"status": st, "m
+
+  }catch(e, trace) {
+    printWrapped(e.toString());
+    printWrapped(trace.toString());
+    print("I am cacthedddddddddddddddddddddddddddddddddddddddddddd");
+    return HttpResponse(
+        status: false,
+        errorMsg: "Erreur inattendue, Problème de connexion",
+        isException: true
+    ); // {"status": st, "msg": msg};{
+  }
+}*/
+
+
+
+
 
 Future<HttpResponse> sendOTP(String api_url, Map data, {String? token}) async {
   try {
@@ -118,42 +201,6 @@ Future<HttpResponse> sendOTP(String api_url, Map data, {String? token}) async {
         status: false,
         errorMsg: "Something wrong happened !",
         isException: true
-    );
-  }
-}
-
-Future<HttpResponse> updateData(String endpoint, Map data, {String? token}) async {
-  try {
-    final url = "${Constantes.BASE_URL}$endpoint";
-    final jsonData = json.encode(data);
-
-    final response = await http.put(
-      Uri.parse(url),
-      headers: {
-        "Authorization": "Bearer $token",
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-      },
-      body: jsonData,
-    );
-
-    final successList = [200, 201];
-    final message = json.decode(response.body);
-    final status = successList.contains(response.statusCode);
-
-    if (response.statusCode == 500) {
-      throw Exception(message);
-    }
-
-    return HttpResponse(status: status, data: message);
-  } catch (e, trace) {
-    printWrapped(e.toString());
-    printWrapped(trace.toString());
-
-    return HttpResponse(
-      status: false,
-      errorMsg: "Something wrong happened!",
-      isException: true,
     );
   }
 }

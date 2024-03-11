@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_fincopay/controllers/UserController.dart';
-import 'package:mobile_fincopay/pages/connexion/VerifyOtpForgotPasswordPage.dart';
+import 'package:mobile_fincopay/pages/connexion/VerifyOTP.dart';
 import 'package:mobile_fincopay/utils/Routes.dart';
 import 'package:mobile_fincopay/widgets/ChargementWidget.dart';
 import 'package:mobile_fincopay/widgets/CustomVisibilityWidget.dart';
-import 'package:mobile_fincopay/widgets/EntryFieldEmailWidgets.dart';
+import 'package:mobile_fincopay/widgets/EntryFieldEmailWithValidateWidgets.dart';
+import 'package:mobile_fincopay/widgets/EntryFieldMobileNumberWithValidateWidgets.dart';
 import 'package:mobile_fincopay/widgets/MessageWidgets.dart';
 import 'package:mobile_fincopay/widgets/ReusableButtonWidgets.dart';
 import 'package:provider/provider.dart';
@@ -18,12 +19,12 @@ class _ForgotYourPasswordState extends State<ForgotYourPassword> {
   bool iSButtonPressedSendaCode = false;
   bool Backtologin = false;
 
-  var email = TextEditingController();
-  var password = TextEditingController();
-  var appName = "FINCOPAY";
+  var mobileNumberoremailaddress = TextEditingController();
+  var mobilephonenumber = TextEditingController();
+  var emailWithValidate = TextEditingController();
 
-  String? userId; // Declare the userId variable here
-
+  bool isEmailFilled = false;
+  bool isPhoneFilled = false;
   bool isLoadingWaitingAPIResponse = false;
 
   //CustomVisibility Bloc variable
@@ -31,6 +32,12 @@ class _ForgotYourPasswordState extends State<ForgotYourPassword> {
 
   bool isVisible = false;
   var formKey = GlobalKey<FormState>();
+
+  List<TextEditingController> otpValue = [];
+
+  void updateVariableCallback(List<TextEditingController> controllers) {
+    otpValue = controllers;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,29 +108,56 @@ class _ForgotYourPasswordState extends State<ForgotYourPassword> {
                       ],
                     ),
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.025),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.03),
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 16.0),
                     child: Text(
-                      'Please enter your email address to Verify Email, for security reasons',
+                      'Verify Email, for security reasons',
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         fontSize: 15,
                       ),
                     ),
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.020),
-                  EntryFieldEmailWidgets(
-                    ctrl: email,
+
+                  EntryFieldMobileNumberWithValidateWidgets(
+                    onChanged: (value) {
+                      setState(() {
+                        isPhoneFilled = !mobilephonenumber.text.isEmpty;
+                        //isPhoneFilled = value.isNotEmpty;
+                        isEmailFilled = false;
+                        mobileNumberoremailaddress.text = value; // Store the value in mobileNumberoremailaddress
+                      });
+                    },
+                    readOnly: isEmailFilled,
+                    suffixIcon: isPhoneFilled ? Container(height: 5, padding: EdgeInsets.all(5.0), child : Image.asset("assets/accept.png")) : null,
+                    ctrl: mobilephonenumber,
+                    label: "",
                     required: true,
-                    label: "Email",
-                    isEmail: false,
+                    isMobileNumberWithValidate: false,
                   ),
+
+                  EntryFieldEmailWithValidateWidgets(
+                    onChanged: (value) {
+                      setState(() {
+                        isEmailFilled = value.isNotEmpty;
+                        isPhoneFilled = false;
+                        mobileNumberoremailaddress.text = value; // Store the value in mobileNumberoremailaddress
+                      });
+                    },
+                    readOnly: isPhoneFilled,
+                    suffixIcon: isEmailFilled ? Container(height: 5, padding: EdgeInsets.all(5.0), child : Image.asset("assets/accept.png")) : null,
+                    ctrl: emailWithValidate,
+                    label: "",
+                    required: true,
+                    isEmailWithValidate: false,
+                  ),
+
                   SizedBox(height: MediaQuery.of(context).size.height * 0.03),
                   ReusableButtonWidgets(
-                    text: "Verify email",
+                    text: "Send a code",
                     fontSize: 14,
-                    onPressed: isLoadingWaitingAPIResponse ? null : _handleSignUpPressed,
+                    onPressed: isLoadingWaitingAPIResponse ? null : _handleLoginPressed,
                     color: Color(0xFF336699),
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.10),
@@ -178,7 +212,7 @@ class _ForgotYourPasswordState extends State<ForgotYourPassword> {
     );
   }
 
-  Future<void> VerifyEmailPressed() async {
+  Future<void> SendACodePressed() async {
     FocusScope.of(context).requestFocus(new FocusNode());
     if (!formKey.currentState!.validate()) {
       return;
@@ -191,54 +225,104 @@ class _ForgotYourPasswordState extends State<ForgotYourPassword> {
 
     var ctrl = context.read<UserController>();
     Map data = {
-      'email': email.text,
-      'appName': appName,
+      "mobileNumberoremailaddress": mobileNumberoremailaddress.text,
     };
 
-    var response = await ctrl.updateUserPasswordVerifyEmail(data);
+    var response = await ctrl.SendOTPRequest(data);
     await Future.delayed(Duration(seconds: 1));
 
     isVisible = false;
     setState(() {});
-
-    userId = response.data?["data"]["userId"] ?? ''; // Here we take the UserId
-
+    print(response.status);
+    /*Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => VerifyOTP(
+          buttonText: 'Submit',
+          updateVariableCallback: updateVariableCallback,
+          routeName: Routes.CreateNewPasswordPageRoutes,
+          onPressed: () {
+            Navigator.pushReplacementNamed(context, Routes.CreateNewPasswordPageRoutes);
+          },
+          onBackButtonPressed: () {
+            Navigator.pushReplacementNamed(context, Routes.ForgotYourPasswordPageRoutes);
+          },
+        ),
+      ),
+    );*/ //To delete after api connexion
     if (response.status) {
       await Future.delayed(Duration(seconds: 1));
       setState(() {});
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => VerifyOtpForgotPasswordPage(userId: userId),
+          builder: (context) => VerifyOTP(
+            buttonText: 'Submit',
+            updateVariableCallback: updateVariableCallback,
+            routeName: Routes.CreateNewPasswordPageRoutes,
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, Routes.CreateNewPasswordPageRoutes);
+            },
+            onBackButtonPressed: () {
+              Navigator.pushReplacementNamed(context, Routes.ForgotYourPasswordPageRoutes);
+            },
+          ),
         ),
       );
-      var msg = (response.data?['message'] ?? "");
+      var msg = (response.data?['message']);
       MessageWidgetsSuccess.showSnack(context, msg);
 
     } else {
-      var msg = response.isException == true ? response.errorMsg : (response.data?['message']);
+      var msg =
+      response.isException == true ? response.errorMsg : (response.data?['message']);
       MessageWidgets.showSnack(context, msg);
     }
     setState(() {
       isLoadingWaitingAPIResponse = false;
     });
-
   }
 
-  void _handleSignUpPressed() async {
+  void _handleLoginPressed() async {
     if (isLoadingWaitingAPIResponse) return;
-
     setState(() {
       isLoadingWaitingAPIResponse = true;
       isCancelButtonVisible = true;
     });
 
-    await VerifyEmailPressed();
+    if (!validateFields()) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Error"),
+            content: Text("You must choose either to use your phone number or your email address!"),
+            actions: [
+              TextButton(
+                child: Text("OK"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      await SendACodePressed();
+    }
 
     setState(() {
       isLoadingWaitingAPIResponse = false;
       isCancelButtonVisible = false;
     });
+  }
+
+  bool validateFields() {
+    if(emailWithValidate.text.isEmpty && mobilephonenumber.text.isEmpty) {
+      return false;
+    }
+
+    return true;
   }
 
   showSnackBar(context, String message) {

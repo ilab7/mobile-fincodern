@@ -128,10 +128,35 @@ class UserController with ChangeNotifier {
     return response;
   }
 
-  Future<HttpResponse> updateUserPassword(Map data) async{
-    var url = "${Endpoints.updatePassword}";
-    HttpResponse response = await updatePassword(url, data);
+  Future<HttpResponse> updateUserPasswordVerifyEmail(Map data) async {
+    var url = "${Endpoints.RequestUpdatePassword}";
+    HttpResponse response = await postData(url, data);
+    print("I am outSide");
+    if (response.status) {
+      stockage?.write(StockageKeys.userKey, response.data?['data']['userId'] ?? {});
+      print("I am insoide");
+      notifyListeners();
+    }
+    return response;
+  }
 
+  Future<HttpResponse> createNewPassword(Map data) async {
+    var url = "${Endpoints.createNewPassword}";
+    HttpResponse response = await postData(url, data);
+    print("I am outSide");
+    if (response.status) {
+      stockage?.write(StockageKeys.userKey, response.data?['data'] ?? {});
+      print("I am insoide");
+      notifyListeners();
+    }
+    return response;
+  }
+
+  /*Future<HttpResponse> updateProfil(Map data) async {
+    var url = "${Endpoints.updateProfil}";
+    var token = stockage?.read(StockageKeys.tokenKey);
+
+    HttpResponse response = await updateData(url, data, token: token);
     if (response.status) {
       user = UserModel.fromJson(response.data?['user'] ?? {});
       stockage?.write("user", response.data?["user"] ?? {});
@@ -140,20 +165,26 @@ class UserController with ChangeNotifier {
       notifyListeners();
     }
     return response;
-  }
+  }*/
 
   Future<HttpResponse> updateProfil(Map data) async {
     var url = "${Endpoints.updateProfil}";
     var token = stockage?.read(StockageKeys.tokenKey);
 
-    HttpResponse response = await postData(url, data, token: token);
+    print("I AM THE UPDATE PROFILE");
+    HttpResponse response = await updateData(url, data, token: token);
     if (response.status) {
-      user = UserModel.fromJson(response.data?['user'] ?? {});
-      stockage?.write("user", response.data?["user"] ?? {});
-      stockage?.write("token", response.data?["token"]?? "");
+      var userData = response.data?['user'];
+      if (userData != null) {
+        user = UserModel.fromJson(userData);
+        stockage?.write("user", userData);
 
-      notifyListeners();
+        print("I AM THE SUCCEEDED UPDATE PROFILE");
+        notifyListeners();
+      }
     }
     return response;
   }
 }
+
+

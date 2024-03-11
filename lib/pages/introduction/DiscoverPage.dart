@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:mobile_fincopay/controllers/UserController.dart';
 import 'package:mobile_fincopay/utils/Routes.dart';
 import 'package:mobile_fincopay/widgets/ReusableButtonWidgets.dart';
 
@@ -12,6 +14,20 @@ class _DiscoverPageState extends State<DiscoverPage> {
   bool iSButtonPressedSignIn = false;
   bool isButtonPressedLoginwithphonenumber = false;
   bool isButtonPressedSkipfornow = false;
+
+/*  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      var userCtrl = context.read<UserController>();
+      if(userCtrl.isFirstTimeBienvenue){
+        isFirstTimeBienvenueNavigate();
+      }
+    });
+  }
+  isFirstTimeBienvenueNavigate(){
+    Navigator.popAndPushNamed(context, Routes.LoginPageRoutes);
+  }*/
 
   @override
   Widget build(BuildContext context) {

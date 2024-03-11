@@ -262,6 +262,8 @@ class _AccountFoundedPageState extends State<AccountFoundedPage> {
       await Future.delayed(Duration(seconds: 1));
       setState(() {});
       Navigator.pushReplacementNamed(context, Routes.BottomNavigationPageRoutes);
+      var msg = (response.data?['message']);
+      MessageWidgetsSuccess.showSnack(context, msg);
     } else {
       var msg =
       response.isException == true ? response.errorMsg : (response.data?['message']);

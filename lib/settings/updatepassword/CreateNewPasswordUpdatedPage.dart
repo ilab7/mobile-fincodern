@@ -174,7 +174,7 @@ class _CreateNewPasswordUpdatedPageState extends State<CreateNewPasswordUpdatedP
       "new password": currentPassword.text,
     };
 
-    var response = await ctrl.updateUserPassword(data);
+    var response = await ctrl.updateUserPasswordVerifyEmail(data);
     await Future.delayed(Duration(seconds: 1));
 
     isVisible = false;

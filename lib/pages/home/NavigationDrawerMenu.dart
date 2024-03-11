@@ -61,13 +61,22 @@ class _NavigationDrawerMenuState extends State<NavigationDrawerMenu> {
           backgroundImage: AssetImage("${userCtrl.user?.image == null ? "assets/avatard.png" : userCtrl.user?.image!}"),
         ),
         SizedBox(height: 12,),
-        Text('${userCtrl.user?.fullName==null ? "Name : Undifined" : userCtrl.user?.fullName}',
+        Text('${userCtrl.user?.fullName==null ? "Fullname : ${
+                  CircularProgressIndicator(
+                    color: Colors.orange,
+                  )
+                }" : userCtrl.user?.fullName}',
+          textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 23,
             color: Colors.white,
           ),
         ),
-        Text('${userCtrl.user?.email == null ? "Email : Un" : userCtrl.user?.email}', style: TextStyle(
+        Text('${userCtrl.user?.email == null ? "Email : ${
+            CircularProgressIndicator(
+              color: Colors.orange,
+            )
+        }" : userCtrl.user?.email}', style: TextStyle(
           fontSize: 15,
           color: Colors.white,
         ),),

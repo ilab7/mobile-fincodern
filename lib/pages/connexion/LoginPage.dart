@@ -314,9 +314,13 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {});
 
     if (response.status) {
-      await Future.delayed(Duration(seconds: 1));
+      await Future.delayed(Duration(seconds: 3));
       setState(() {});
       Navigator.pushNamedAndRemoveUntil(context, Routes.BottomNavigationPageRoutes, ModalRoute.withName('/loginpage'),);
+
+      var msg = (response.data?['message'] ?? "You're login");
+      MessageWidgetsSuccess.showSnack(context, msg);
+
     } else {
       var msg = response.isException == true ? response.errorMsg : (response.data?['message']);
       MessageWidgets.showSnack(context, msg);

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_fincopay/controllers/UserController.dart';
+import 'package:mobile_fincopay/utils/StockageKeys.dart';
 import 'package:provider/provider.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:mobile_fincopay/pages/home/HomePage.dart';
+import 'package:mobile_fincopay/pages/home/MyHomePage.dart';
 import 'package:mobile_fincopay/pages/user/ProfilPage.dart';
 
 class BottomNavigationPage extends StatefulWidget {
@@ -29,7 +30,7 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
   }
 
   final pages = [
-    HomePage(),
+    MyHomePage(),
     ProfilPage(),
   ];
 
@@ -45,7 +46,7 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
   }
 
   Widget _bottomNavigation(){
-    var userCtrl = context.watch<UserController>();
+    context.watch<UserController>();
     return Container(
       decoration: BoxDecoration(
         boxShadow: [

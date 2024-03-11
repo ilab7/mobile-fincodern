@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import '../utils/Routes.dart';
+import '../../utils/Routes.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -12,7 +12,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(Duration(seconds: 2), () {
-      Navigator.pushReplacementNamed(context, Routes.DiscoverPageRoutes);
+      Navigator.pushReplacementNamed(context, Routes.OnBoardingPageRoutes);
     });
   }
 

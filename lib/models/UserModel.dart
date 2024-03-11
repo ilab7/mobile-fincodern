@@ -9,7 +9,9 @@ class UserModel {
   String? id;
   String? roles;
   String? fullName;
+  String? gender;
   String? email;
+  String? address;
   String? phone;
   String? image;
   String? countryCode;
@@ -25,7 +27,9 @@ class UserModel {
     this.id,
     this.roles,
     this.fullName,
+    this.gender,
     this.email,
+    this.address,
     this.phone,
     this.image,
     this.countryCode,
@@ -42,7 +46,9 @@ class UserModel {
     id: json["id"],
     roles: json["roles"],
     fullName: json["fullName"],
+    gender: json["gender"],
     email: json["email"],
+    address: json["address"],
     phone: json["phone"],
     image: json["image"],
     countryCode: json["countryCode"],
@@ -59,7 +65,9 @@ class UserModel {
     "id": id,
     "roles": roles,
     "fullName": fullName,
+    "gender": gender,
     "email": email,
+    "address": address,
     "phone": phone,
     "image": image,
     "countryCode": countryCode,

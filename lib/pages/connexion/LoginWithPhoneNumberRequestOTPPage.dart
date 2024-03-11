@@ -3,6 +3,7 @@ import 'package:mobile_fincopay/controllers/UserController.dart';
 import 'package:mobile_fincopay/pages/connexion/RequestOtpLoginWithPhonePage.dart';
 import 'package:mobile_fincopay/utils/Routes.dart';
 import 'package:mobile_fincopay/widgets/ChargementWidget.dart';
+import 'package:mobile_fincopay/widgets/CustomVisibilityWidget.dart';
 import 'package:mobile_fincopay/widgets/EntryFieldMobileNumberWidgets.dart';
 import 'package:mobile_fincopay/widgets/MessageWidgets.dart';
 import 'package:mobile_fincopay/widgets/ReusableButtonWidgets.dart';
@@ -25,6 +26,9 @@ class _LoginWithPhoneNumberRequestOTPPageState extends State<LoginWithPhoneNumbe
   bool isVisible = false;
   bool isLoadingWaitingAPIResponse = false;
 
+  //CustomVisibility Bloc variable
+  bool isCancelButtonVisible = false;
+
   List<TextEditingController> otpValue = [];
   String? userId; // Declare the userId variable here
 
@@ -41,7 +45,6 @@ class _LoginWithPhoneNumberRequestOTPPageState extends State<LoginWithPhoneNumbe
           child: Stack(
             children: [
               _body(context),
-              ChargementWidget(isVisible),
             ],
           ),
         ),
@@ -139,6 +142,23 @@ class _LoginWithPhoneNumberRequestOTPPageState extends State<LoginWithPhoneNumbe
                               ),
                             ),
                           ),
+
+                          CustomVisibilityWidget(
+                            visible: isCancelButtonVisible,
+                            onPressed: () {
+                              setState(() {
+                                isCancelButtonVisible = false;
+                                isLoadingWaitingAPIResponse = false;
+                              });
+                            },
+                            child: Text(
+                              'Cancel query',
+                              textAlign: TextAlign.right,
+                              style: TextStyle(
+                                color: Colors.red,
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -184,7 +204,7 @@ class _LoginWithPhoneNumberRequestOTPPageState extends State<LoginWithPhoneNumbe
 
 
     if (response.status) {
-      await Future.delayed(Duration(seconds: 1));
+      await Future.delayed(Duration(seconds: 12));
       setState(() {});
       Navigator.push(
         context,
@@ -208,12 +228,14 @@ class _LoginWithPhoneNumberRequestOTPPageState extends State<LoginWithPhoneNumbe
 
     setState(() {
       isLoadingWaitingAPIResponse = true;
+      isCancelButtonVisible = true;
     });
 
     await RequestOTPtoLogin();
 
     setState(() {
       isLoadingWaitingAPIResponse = false;
+      isCancelButtonVisible = false;
     });
   }
 

@@ -3,12 +3,12 @@ import 'package:mobile_fincopay/controllers/UserController.dart';
 import 'package:mobile_fincopay/pages/home/NavigationDrawerMenu.dart';
 import 'package:provider/provider.dart';
 
-class HomePage extends StatefulWidget {
+class MyHomePage extends StatefulWidget {
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _MyHomePageState extends State<MyHomePage> {
 
   void initState() {
     super.initState();
