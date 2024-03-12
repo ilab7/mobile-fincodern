@@ -288,36 +288,34 @@ class _VerifyOtpForgotPasswordPageState extends State<VerifyOtpForgotPasswordPag
       'otp': otpValue, // Add the OTP value to the data map
     };
 
-    var res = await ctrl.verifyOTPRequest(data);
+    var response = await ctrl.resendVerifyOTPRequest(data);
     await Future.delayed(Duration(seconds: 3));
 
     isVisible = false;
     setState(() {});
 
-    print("VERIFY OTO PAGE USERID CONTENT : $userId");
-
-    resetString = res.data?["data"]["resetString"] ?? ''; // Here we take the UserId
-    print("VERIFY OTO PAGE USERID CONTENT : $resetString");
-    if (res.status) {
-      await Future.delayed(Duration(seconds: 3));
+    resetString = response.data?["data"]["resetString"] ?? ''; // Here we take the resetString
+    var userIdTsend = response.data?["data"]["userId"] ?? ''; // Here we take the userIdTsend to send
+    print("VERIFY OTO PAGE USERID CONTENT : $userIdTsend");
+    if (response.status) {
+      await Future.delayed(Duration(seconds: 1));
       setState(() {});
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => CreateNewPasswordPage(userId: userId, resetString: resetString),
+          builder: (context) => CreateNewPasswordPage(userId: userId, resetString: resetString,),
         ),
       );
-      var msg = (res.data?['message'] ?? "");
+      var msg = (response.data?['message'] ?? "");
       MessageWidgetsSuccess.showSnack(context, msg);
 
     } else {
-      var msg = res.isException == true ? res.errorMsg : (res.data?['message']);
+      var msg = response.isException == true ? response.errorMsg : (response.data?['message']);
       MessageWidgets.showSnack(context, msg);
     }
     setState(() {
       isLoadingWaitingAPIResponseOther = false;
     });
-
   }
 
   void _handleRequestAgainOTPtoSignUpPressed() async {
@@ -332,16 +330,5 @@ class _VerifyOtpForgotPasswordPageState extends State<VerifyOtpForgotPasswordPag
     setState(() {
       isLoadingWaitingAPIResponseOther = false;
     });
-  }
-
-  showSnackBar(context, String message) {
-    final scaffold = ScaffoldMessenger.of(context);
-    scaffold.showSnackBar(SnackBar(
-      content: Text(message),
-      action:
-      SnackBarAction(label: 'OK',
-          textColor: Colors.orange,
-          onPressed: scaffold.hideCurrentSnackBar),
-    ));
   }
 }

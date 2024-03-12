@@ -2,9 +2,13 @@ class Endpoints {
   static const String login = "/login_with_email";
   static const String login_with_phoneNumber = "/login_with_phone";
   static const String resend_login_OTP = "/resend_login_OTP";
+  static const String resend_requestPasswordReset_OTP = "/resend_request_password_reset_mobile_app";
   static const String register = "/register_with_email";
   static const String logout = "/logout";
   static const String verifyOTP = "/verify_otp_for_password_reset";
+  static const String verifyLoginOTPPhoneNumber = "/verify_login_OTP";
+  static const String resendVerifyLoginOTPPhoneNumber = "/verify_login_OTP";
+  static const String phoneNumberVerifyOTP = "/verify_otp_for_password_reset";
   static const String verifyOTPRegister = "/verify_OTP";
   static const String RequestUpdatePassword = "/request_password_reset_mobile_app";
   static const String createNewPassword = "/reset_password";

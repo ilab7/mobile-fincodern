@@ -74,7 +74,7 @@ class RoutesManager {
       case Routes.NavigationDrawerMenuRoutes:
         return MaterialPageRoute(builder: (_) => NavigationDrawerMenu());
 
-      case Routes.RequestOtpLoginWithPhonePageRoutes:
+      case Routes.VerifyOtpLoginWithPhonePageRoutes:
         return MaterialPageRoute(builder: (_) => LoginWithPhoneNumberRequestOTPPage());
 
       case Routes.EditProfilePageRoutes:

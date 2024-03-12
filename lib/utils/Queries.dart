@@ -131,7 +131,6 @@ Future<HttpResponse> updateData(String endpoint, Map data, {String? token}) asyn
   }
 }
 
-
 /*Future<dynamic> updateData(String endpoint, Map data, {String? token}) async {
   final dio = Dio();
 
@@ -172,10 +171,6 @@ Future<HttpResponse> updateData(String endpoint, Map data, {String? token}) asyn
     ); // {"status": st, "msg": msg};{
   }
 }*/
-
-
-
-
 
 Future<HttpResponse> sendOTP(String api_url, Map data, {String? token}) async {
   try {

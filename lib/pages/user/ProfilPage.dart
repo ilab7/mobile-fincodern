@@ -119,7 +119,7 @@ class _ProfilPageState extends State<ProfilPage> {
                               Container(
                                 padding: EdgeInsets.symmetric(horizontal: 16.0),
                                 child: Text(
-                                  '${userCtrl.user?.fullName}',
+                                  '${userCtrl.user?.fullName == null ? "Fullname : null" : userCtrl.user?.fullName}',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: Colors.black,
@@ -149,7 +149,7 @@ class _ProfilPageState extends State<ProfilPage> {
               ),
               SizedBox(width: MediaQuery.of(context).size.width * 0.04),
               Text(
-                "${userCtrl.user?.phone == null ? "Phone : ${CircularProgressIndicator(color: Colors.orange,)}" : userCtrl.user?.phone}",
+                "${userCtrl.user?.phone == null ? "Phone : null" : userCtrl.user?.phone}",
                 style: TextStyle(
                   fontSize: 15,
                 ),
@@ -168,7 +168,7 @@ class _ProfilPageState extends State<ProfilPage> {
               ),
               SizedBox(width: MediaQuery.of(context).size.width * 0.04),
               Text(
-                "${userCtrl.user?.email == null ? "Email : ${CircularProgressIndicator(color: Colors.orange,)}" : userCtrl.user?.email}",
+                "${userCtrl.user?.email == null ? "Email : null" : userCtrl.user?.email}",
                 style: TextStyle(
                   fontSize: 15,
                 ),

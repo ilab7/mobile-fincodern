@@ -6,19 +6,17 @@ import 'package:mobile_fincopay/utils/Routes.dart';
 import 'package:mobile_fincopay/widgets/MessageWidgets.dart';
 import 'package:mobile_fincopay/widgets/ReusableButtonWidgets.dart';
 
-class RequestOtpLoginWithPhonePage extends StatefulWidget {
+class VerifyOtpLoginWithPhonePage extends StatefulWidget {
   final String? userId;
-  final String? phone;
 
-  const RequestOtpLoginWithPhonePage({Key? key, required this.userId, required this.phone}) : super(key: key);
+  const VerifyOtpLoginWithPhonePage({Key? key, required this.userId}) : super(key: key);
 
   @override
-  _RequestOtpLoginWithPhonePageState createState() => _RequestOtpLoginWithPhonePageState();
+  _VerifyOtpLoginWithPhonePageState createState() => _VerifyOtpLoginWithPhonePageState();
 }
 
-class _RequestOtpLoginWithPhonePageState extends State<RequestOtpLoginWithPhonePage> {
+class _VerifyOtpLoginWithPhonePageState extends State<VerifyOtpLoginWithPhonePage> {
   String? get userId => widget.userId;
-  String? get phone => widget.phone;
   var IdUser;
 
   String appName = 'FINCOPAY';
@@ -226,7 +224,7 @@ class _RequestOtpLoginWithPhonePageState extends State<RequestOtpLoginWithPhoneP
       'otp': otpValue, // Add the OTP value to the data map
     };
 
-    var res = await ctrl.requestOTPPhoneNumber(data);
+    var response = await ctrl.PhoneNumberverifyOTPRequest(data);
     await Future.delayed(Duration(seconds: 1));
 
     isVisible = false;
@@ -235,14 +233,14 @@ class _RequestOtpLoginWithPhonePageState extends State<RequestOtpLoginWithPhoneP
     print("ELEMENTS TO SEND AS OTP : $IdUser");
     print("ELEMENTS TO SEND AS OTP : $otpValue");
 
-    if (res.status) {
+    if (response.status) {
       await Future.delayed(Duration(seconds: 1));
       setState(() {});
-
       Navigator.pushNamedAndRemoveUntil(context, Routes.BottomNavigationPageRoutes, ModalRoute.withName('/discoverpage'),);
-
+      var msg = (response.data?['message'] ?? "");
+      MessageWidgetsSuccess.showSnack(context, msg);
     } else {
-      var msg = res.isException == true ? res.errorMsg : (res.data?['message']);
+      var msg = response.isException == true ? response.errorMsg : (response.data?['message']);
       MessageWidgets.showSnack(context, msg);
     }
     setState(() {
@@ -274,44 +272,42 @@ class _RequestOtpLoginWithPhonePageState extends State<RequestOtpLoginWithPhoneP
     setState(() {
       isLoadingWaitingAPIResponseOther = true;
     });
+// Retrieve the OTP value from the controllers
+    otpValue = '';
+    for (var controller in _controllers) {
+      otpValue += controller.text;
+    }
+
+    IdUser = userId;
 
     var ctrl = context.read<UserController>();
-    Map data = {
-      "phone": phone,
-      "appName": appName
+    Map<String, dynamic> data = {
+      'userId': IdUser, // Introduce the userId value here
+      'otp': otpValue, // Add the OTP value to the data map
     };
 
-    var response = await ctrl.ResendOTPForLoginWithPhoneNumber(data);//Change Function Resend
+    var response = await ctrl.ResendPhoneNumberverifyOTPRequest(data);
     await Future.delayed(Duration(seconds: 1));
 
     isVisible = false;
     setState(() {});
 
-    print("DATA TO SEND JOSUE API TEST : ${phone}");
-    print("DATA TO SEND JOSUE API TEST : $appName");
-
-    userIdd = response.data?["data"]["userId"] ?? ''; // Here we update the userId value
+    print("ELEMENTS TO SEND AS OTP : $IdUser");
+    print("ELEMENTS TO SEND AS OTP : $otpValue");
 
     if (response.status) {
       await Future.delayed(Duration(seconds: 1));
       setState(() {});
-
-      IdUser = userIdd; //Here we are updating the IdUser variable to userIdd
-      // We are passing by IdUser variable because we can not modified a setter (userId with is Final)
-      Navigator.pushNamedAndRemoveUntil(context, Routes.LoginPageRoutes, ModalRoute.withName('/discoverpage'),);
-      var msg = (response.data?['message']);
+      Navigator.pushNamedAndRemoveUntil(context, Routes.BottomNavigationPageRoutes, ModalRoute.withName('/discoverpage'),);
+      var msg = (response.data?['message'] ?? "");
       MessageWidgetsSuccess.showSnack(context, msg);
-
-      print("THIS IS VALUE OF IdUser : ${IdUser}");
-
     } else {
       var msg = response.isException == true ? response.errorMsg : (response.data?['message']);
       MessageWidgets.showSnack(context, msg);
     }
     setState(() {
-      isLoadingWaitingAPIResponseOther = false;
+      isLoadingWaitingAPIResponse = false;
     });
-
   }
 
   void _handleRequestAgainOTPtoLoginPressed() async {
@@ -326,16 +322,5 @@ class _RequestOtpLoginWithPhonePageState extends State<RequestOtpLoginWithPhoneP
     setState(() {
       isLoadingWaitingAPIResponseOther = false;
     });
-  }
-
-  showSnackBar(context, String message) {
-    final scaffold = ScaffoldMessenger.of(context);
-    scaffold.showSnackBar(SnackBar(
-      content: Text(message),
-      action:
-      SnackBarAction(label: 'OK',
-          textColor: Colors.orange,
-          onPressed: scaffold.hideCurrentSnackBar),
-    ));
   }
 }

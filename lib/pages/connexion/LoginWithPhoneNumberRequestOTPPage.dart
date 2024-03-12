@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_fincopay/controllers/UserController.dart';
-import 'package:mobile_fincopay/pages/connexion/RequestOtpLoginWithPhonePage.dart';
+import 'package:mobile_fincopay/pages/connexion/VerifyOtpLoginWithPhonePage.dart';
 import 'package:mobile_fincopay/utils/Routes.dart';
 import 'package:mobile_fincopay/widgets/ChargementWidget.dart';
 import 'package:mobile_fincopay/widgets/CustomVisibilityWidget.dart';
@@ -45,6 +45,7 @@ class _LoginWithPhoneNumberRequestOTPPageState extends State<LoginWithPhoneNumbe
           child: Stack(
             children: [
               _body(context),
+              ChargementWidget(isVisible),
             ],
           ),
         ),
@@ -209,7 +210,7 @@ class _LoginWithPhoneNumberRequestOTPPageState extends State<LoginWithPhoneNumbe
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => RequestOtpLoginWithPhonePage(userId: userId, phone: phone.text,),
+          builder: (context) => VerifyOtpLoginWithPhonePage(userId: userId),
         ),
       );
 

@@ -20,6 +20,6 @@ class Routes {
   static const String EditProfilePageRoutes = "/editprofilepage";
   static const String VerifyOtpSignUpPageRoutes = "/verifyotpsignuppage";
   static const String NavigationDrawerMenuRoutes = "/navigationdrawermenu";
-  static const String RequestOtpLoginWithPhonePageRoutes = "/requestotploginwithphonepage";
+  static const String VerifyOtpLoginWithPhonePageRoutes = "/verifyotploginwithphonepage";
   static const String OnBoardingPageRoutes = "/onboardingpage";
 }

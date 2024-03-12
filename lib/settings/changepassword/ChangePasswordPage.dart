@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_fincopay/controllers/UserController.dart';
-import 'package:mobile_fincopay/utils/Routes.dart';
 import 'package:mobile_fincopay/widgets/ChargementWidget.dart';
 import 'package:mobile_fincopay/widgets/CustomVisibilityWidget.dart';
 import 'package:mobile_fincopay/widgets/EntryFieldPasswordWidgets.dart';
@@ -182,7 +181,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     if (response.status) {
       await Future.delayed(Duration(seconds: 3));
       setState(() {});
-      Navigator.pushNamedAndRemoveUntil(context, Routes.SettingsPageRoutes, ModalRoute.withName('/settingspage'),);
+      Navigator.pop(context);
       var msg = (response.data?['message']);
       MessageWidgetsSuccess.showSnack(context, msg);
     } else {
