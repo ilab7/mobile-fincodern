@@ -38,6 +38,30 @@ class UserController with ChangeNotifier {
     return response;
   }
 
+  Future<HttpResponse> findAccountEmail(Map data) async{
+    var url = "${Endpoints.find_by_email}";
+    HttpResponse response = await postData(url, data);
+    print("HI Josue I am outside FindAccountEmail");
+    if (response.status) {
+      stockage?.write(StockageKeys.userKey, response.data?['data']['userId'] ?? {});
+      print("HI Josue I am inside FindAccountEmail");
+      notifyListeners();
+    }
+    return response;
+  }
+
+  Future<HttpResponse> findAccountPhone(Map data) async{
+    var url = "${Endpoints.find_by_phone}";
+    HttpResponse response = await postData(url, data);
+    print("HI Josue I am out side FindAccountPhone");
+    if (response.status) {
+      stockage?.write(StockageKeys.userKey, response.data?['data']['userId'] ?? {});
+      print("HI Josue I am inside FindAccountPhone");
+      notifyListeners();
+    }
+    return response;
+  }
+
   Future<HttpResponse> login(Map data) async {
     var url = "${Endpoints.login}";
     HttpResponse response = await postData(url, data);
@@ -88,7 +112,7 @@ class UserController with ChangeNotifier {
         user = UserModel.fromJson(userData);
       }
       //user = UserModel.fromJson(response.data?['user'] ?? {});
-      stockage?.write(StockageKeys.tokenKey, response.data?[""] ?? "");
+      stockage?.write(StockageKeys.tokenKey, response.data?["accessToken"] ?? "");
       //stockage?.read(StockageKeys.tokenKey, response.data?['user']);
       printWrapped("VERIFY OTP RESPONSE : $user");
       notifyListeners();
@@ -105,7 +129,7 @@ class UserController with ChangeNotifier {
         user = UserModel.fromJson(userData);
       }
       //user = UserModel.fromJson(response.data?['user'] ?? {});
-      stockage?.write(StockageKeys.tokenKey, response.data?[""] ?? "");
+      stockage?.write(StockageKeys.tokenKey, response.data?["accessToken"] ?? "");
       //stockage?.read(StockageKeys.tokenKey, response.data?['user']);
       printWrapped("VERIFY OTP RESPONSE : $user");
       notifyListeners();
@@ -122,7 +146,7 @@ class UserController with ChangeNotifier {
         user = UserModel.fromJson(userData);
       }
       //user = UserModel.fromJson(response.data?['user'] ?? {});
-      stockage?.write(StockageKeys.tokenKey, response.data?[""] ?? "");
+      stockage?.write(StockageKeys.tokenKey, response.data?["accessToken"] ?? "");
       //stockage?.read(StockageKeys.tokenKey, response.data?['user']);
       printWrapped("VERIFY OTP RESPONSE : $user");
       notifyListeners();
@@ -139,7 +163,7 @@ class UserController with ChangeNotifier {
         user = UserModel.fromJson(userData);
       }
       //user = UserModel.fromJson(response.data?['user'] ?? {});
-      stockage?.write(StockageKeys.tokenKey, response.data?[""] ?? "");
+      stockage?.write(StockageKeys.tokenKey, response.data?["accessToken"] ?? "");
       //stockage?.read(StockageKeys.tokenKey, response.data?['user']);
       printWrapped("VERIFY OTP RESPONSE : $user");
       notifyListeners();
@@ -156,7 +180,7 @@ class UserController with ChangeNotifier {
         user = UserModel.fromJson(userData);
       }
       //user = UserModel.fromJson(response.data?['user'] ?? {});
-      stockage?.write(StockageKeys.tokenKey, response.data?[""] ?? "");
+      stockage?.write(StockageKeys.tokenKey, response.data?["accessToken"] ?? "");
       //stockage?.read(StockageKeys.tokenKey, response.data?['user']);
       printWrapped("VERIFY OTP RESPONSE : $user");
       notifyListeners();

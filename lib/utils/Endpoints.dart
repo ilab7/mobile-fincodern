@@ -4,6 +4,8 @@ class Endpoints {
   static const String resend_login_OTP = "/resend_login_OTP";
   static const String resend_requestPasswordReset_OTP = "/resend_request_password_reset_mobile_app";
   static const String register = "/register_with_email";
+  static const String find_by_email = "/find_by_email";
+  static const String find_by_phone = "/find_by_phone";
   static const String logout = "/logout";
   static const String verifyOTP = "/verify_otp_for_password_reset";
   static const String verifyLoginOTPPhoneNumber = "/verify_login_OTP";

@@ -8,6 +8,10 @@ import 'package:mobile_fincopay/widgets/ReusableButtonWidgets.dart';
 import 'package:provider/provider.dart';
 
 class AccountFoundedPage extends StatefulWidget {
+  final dynamic userInfo;
+
+  const AccountFoundedPage({Key? key, required this.userInfo}) : super(key: key);
+
   @override
   State<AccountFoundedPage> createState() => _AccountFoundedPageState();
 }
@@ -78,7 +82,8 @@ class _AccountFoundedPageState extends State<AccountFoundedPage> {
                   child: Center(
                     child: ClipRRect(
                         borderRadius: BorderRadius.circular(70),
-                        child: Image.asset("assets/josuenlandu.jpg")
+
+                        child: Image.asset("assets/avatard.png")
                     ),
                   ),
                 ),
@@ -86,7 +91,8 @@ class _AccountFoundedPageState extends State<AccountFoundedPage> {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 16.0),
                   child: Text(
-                    'Josué Nlandu',
+                    //'Josué Nlandu',
+                    '${widget.userInfo['fullName'] == null ? "Fullname : null" : widget.userInfo['fullName']}',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 22,

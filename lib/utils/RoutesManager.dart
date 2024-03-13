@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_fincopay/pages/introduction/DiscoverPage.dart';
 import 'package:mobile_fincopay/pages/BottomNavigationPage.dart';
-import 'package:mobile_fincopay/pages/connexion/AccountFoundedPage.dart';
 import 'package:mobile_fincopay/pages/connexion/FindYourAccountPage.dart';
 import 'package:mobile_fincopay/pages/connexion/ForgotYourPasswordPage.dart';
 import 'package:mobile_fincopay/pages/connexion/LoginPage.dart';
@@ -37,9 +36,6 @@ class RoutesManager {
 
       case Routes.FindYourAccountPageRoutes:
         return MaterialPageRoute(builder: (_) => FindYourAccountPage());
-
-      case Routes.AccountFoundedPageRoutes:
-        return MaterialPageRoute(builder: (_) => AccountFoundedPage());
 
       case Routes.SignUpPagePageRoutes:
         return MaterialPageRoute(builder: (_) => SignUpPage());

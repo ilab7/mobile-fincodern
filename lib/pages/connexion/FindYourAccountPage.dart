@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_fincopay/controllers/UserController.dart';
-import 'package:mobile_fincopay/pages/connexion/VerifyOTP.dart';
+import 'package:mobile_fincopay/pages/connexion/AccountFoundedPage.dart';
 import 'package:mobile_fincopay/utils/Routes.dart';
 import 'package:mobile_fincopay/widgets/ChargementWidget.dart';
 import 'package:mobile_fincopay/widgets/CustomVisibilityWidget.dart';
@@ -25,7 +25,7 @@ class _FindYourAccountPageState extends State<FindYourAccountPage> {
   }
 
   bool iSButtonPressedSearch = false;
-  bool isButtonPressedLoginwithphonenumberoremailaddress = false;
+  //bool isButtonPressedLoginwithphonenumberoremailaddress = false;
   bool isButtonPressedSkipfornow = false;
   var mobileNumberoremailaddress = TextEditingController();
   bool isVisible = false;
@@ -39,6 +39,11 @@ class _FindYourAccountPageState extends State<FindYourAccountPage> {
   var emailWithValidate = TextEditingController();
   bool isEmailFilled = false;
   bool isPhoneFilled = false;
+
+  var response;
+  var appname = "FINCOPAY";
+
+  var userInfo; //UserInfo variable to store API response User info
 
   List<TextEditingController> otpValue = [];
 
@@ -222,45 +227,7 @@ class _FindYourAccountPageState extends State<FindYourAccountPage> {
     );
   }
 
-  //OTP Request for API Interactions
-  Future<void> VerifyOTPPressed() async {
-
-    isVisible = true;
-
-    var ctrl = context.read<UserController>();
-    Map data = {
-      "mobileNumberoremailaddress": otpValue.map((e) => e.text).toList(),
-    };
-    var response = await ctrl.verifyOTPRequest(data);
-    await Future.delayed(Duration(seconds: 1));
-
-    isVisible = false;
-    setState(() {});
-
-    Navigator.pushReplacementNamed(context, Routes.BottomNavigationPageRoutes);
-    if (response.status) {
-      await Future.delayed(Duration(seconds: 1));
-      setState(() {});
-      Navigator.pushReplacementNamed(context, Routes.BottomNavigationPageRoutes);
-    } else {
-      var msg =
-      response.isException == true ? response.errorMsg : (response.data?['message']);
-      MessageWidgets.showSnack(context, msg);
-    }
-  }
-
-  showSnackBar(context, String message) {
-    final scaffold = ScaffoldMessenger.of(context);
-    scaffold.showSnackBar(SnackBar(
-      content: Text(message),
-      action:
-      SnackBarAction(label: 'OK',
-          textColor: Colors.orange,
-          onPressed: scaffold.hideCurrentSnackBar),
-    ));
-  }
-
-  Future<void> SearchPressed() async {
+  Future<void> FindYourAccountWithEmailPressed() async {
     FocusScope.of(context).requestFocus(new FocusNode());
     if (!formKey.currentState!.validate()) {
       return;
@@ -271,59 +238,47 @@ class _FindYourAccountPageState extends State<FindYourAccountPage> {
       isLoadingWaitingAPIResponse = true;
     });
 
-    var ctrl = context.read<UserController>();
-    Map data = {
-      "mobileNumberoremailaddress": mobileNumberoremailaddress.text,
-    };
-    var response = await ctrl.SendOTPRequest(data);
-    await Future.delayed(Duration(seconds: 1));
+    if (emailWithValidate.text.isNotEmpty){
+      var ctrl = context.read<UserController>();
+      String phoneNumberOrEmailAddress = mobileNumberoremailaddress.text;
+      //print(phoneNumberOrEmailAddress); // Output
+      Map data = {
+        "email": phoneNumberOrEmailAddress,
+        "appName": appname,
+      };
+      response = await ctrl.findAccountEmail(data);
+      await Future.delayed(Duration(seconds: 1));
+    } else if (mobilephonenumber.text.isNotEmpty) {
+      String phoneNumberOrEmailAddress = mobileNumberoremailaddress.text; //We do it tho evoid to long string
+      //print(phoneNumberOrEmailAddress); // Output
+      var ctrl = context.read<UserController>();
+      Map data = {
+        "phone": phoneNumberOrEmailAddress,
+        "appName": appname,
+      };
+      response = await ctrl.findAccountPhone(data);
+      await Future.delayed(Duration(seconds: 1));
+    }
 
     isVisible = false;
     setState(() {});
-    print(response.status);
 
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => VerifyOTP(
-          buttonText: 'Submit',
-          updateVariableCallback: updateVariableCallback,
-          routeName: Routes.AccountFoundedPageRoutes,
-          onPressed: () {
-            Navigator.pushReplacementNamed(context, Routes.AccountFoundedPageRoutes);
-          },
-          onBackButtonPressed: () {
-            Navigator.pushReplacementNamed(context, Routes.FindYourAccountPageRoutes);
-          },
-        ),
-      ),
-    );
+    userInfo = response.data?["data"]; //UserInfo response
 
     if (response.status) {
       await Future.delayed(Duration(seconds: 1));
       setState(() {});
-      Navigator.pushReplacement(
+      Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => VerifyOTP(
-            buttonText: 'Submit',
-            updateVariableCallback: updateVariableCallback,
-            routeName: Routes.AccountFoundedPageRoutes,
-            onPressed: () {
-              Navigator.pushReplacementNamed(context, Routes.AccountFoundedPageRoutes);
-            },
-            onBackButtonPressed: () {
-              Navigator.pushReplacementNamed(context, Routes.FindYourAccountPageRoutes);
-            },
-          ),
+          builder: (context) => AccountFoundedPage(userInfo: userInfo),
         ),
       );
-      var msg = (response.data?['message']);
+      var msg = (response.data?['message'] ?? "");
       MessageWidgetsSuccess.showSnack(context, msg);
 
     } else {
-      var msg =
-      response.isException == true ? response.errorMsg : (response.data?['message']);
+      var msg = response.isException == true ? response.errorMsg : (response.data?['message']);
       MessageWidgets.showSnack(context, msg);
     }
     setState(() {
@@ -333,6 +288,7 @@ class _FindYourAccountPageState extends State<FindYourAccountPage> {
 
   void _handleFindYourAccountPressed() async {
     if (isLoadingWaitingAPIResponse) return;
+
     setState(() {
       isLoadingWaitingAPIResponse = true;
       isCancelButtonVisible = true;
@@ -357,7 +313,7 @@ class _FindYourAccountPageState extends State<FindYourAccountPage> {
         },
       );
     } else {
-      await SearchPressed();
+      await FindYourAccountWithEmailPressed();
     }
 
     setState(() {
