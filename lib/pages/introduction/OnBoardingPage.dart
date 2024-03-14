@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mobile_fincopay/utils/Routes.dart';
 import 'package:provider/provider.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:mobile_fincopay/controllers/UserController.dart';
@@ -16,20 +15,16 @@ class OnBoardingPage extends StatefulWidget {
 
 class OnBoardingPageState extends State<OnBoardingPage> {
 
-  /*@override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      var userCtrl = context.read<UserController>();
-      if(userCtrl.isFirstTimeBienvenue){
-        isFirstTimeBienvenueNavigate();
-      }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future.delayed(Duration.zero, () {
+        var userCtrl = context.read<UserController>();
+        bool firstTime = true;
+        userCtrl.isFirstTimeBienvenue = firstTime;
+      });
     });
   }
-
-  isFirstTimeBienvenueNavigate(){
-    Navigator.popAndPushNamed(context, Routes.DiscoverPageRoutes);
-  }*/
 
   final introKey = GlobalKey<IntroductionScreenState>();
 
@@ -37,7 +32,6 @@ class OnBoardingPageState extends State<OnBoardingPage> {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (_) => DiscoverPage()),
     );
-    //isFirstTimeBienvenueNavigate();
   }
 
   Widget _buildFullscreenImage() {

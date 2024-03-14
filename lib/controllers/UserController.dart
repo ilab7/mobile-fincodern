@@ -10,7 +10,7 @@ class UserController with ChangeNotifier {
   UserModel? user;
   String? token;
   bool loading = false;
-  GetStorage? stockage;
+  GetStorage? stockage = GetStorage();
   bool _isFirstTimeBienvenue = false;
   bool get isFirstTimeBienvenue {
     return stockage?.read<bool>(StockageKeys.is_first_time) ?? _isFirstTimeBienvenue;

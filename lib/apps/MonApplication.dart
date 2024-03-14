@@ -23,6 +23,7 @@ class MonApplication extends StatelessWidget {
       child: Consumer<ThemeProvider>(
         builder: (_, themeProvider, __) {
           return MaterialApp(
+            
             theme: ThemeData(
               brightness: themeProvider.isDarkMode ? Brightness.dark : Brightness.light,
               textTheme: GoogleFonts.montserratTextTheme(
