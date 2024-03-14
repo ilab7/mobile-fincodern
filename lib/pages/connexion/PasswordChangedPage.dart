@@ -59,7 +59,7 @@ class _PasswordChangedPageState extends State<PasswordChangedPage> {
                             textAlign: TextAlign.left,
                             style: TextStyle(
                               fontSize: 24,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
                         ],

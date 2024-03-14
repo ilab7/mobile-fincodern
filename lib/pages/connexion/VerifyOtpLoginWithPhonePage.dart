@@ -99,7 +99,7 @@ class _VerifyOtpLoginWithPhonePageState extends State<VerifyOtpLoginWithPhonePag
                             textAlign: TextAlign.left,
                             style: TextStyle(
                               fontSize: 24,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
                         ],

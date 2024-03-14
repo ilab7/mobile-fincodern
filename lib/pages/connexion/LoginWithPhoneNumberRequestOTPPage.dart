@@ -103,7 +103,7 @@ class _LoginWithPhoneNumberRequestOTPPageState extends State<LoginWithPhoneNumbe
                             textAlign: TextAlign.left,
                             style: TextStyle(
                               fontSize: 24,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
                         ],

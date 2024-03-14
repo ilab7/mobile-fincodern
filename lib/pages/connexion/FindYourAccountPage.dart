@@ -117,7 +117,7 @@ class _FindYourAccountPageState extends State<FindYourAccountPage> {
                               textAlign: TextAlign.left,
                               style: TextStyle(
                                 fontSize: 24,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w700,
                               ),
                             ),
                           ],

@@ -97,7 +97,7 @@ class _CreateNewPasswordPageState extends State<CreateNewPasswordPage> {
                             'Create new password',
                             style: TextStyle(
                               fontSize: 24,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
                         ],

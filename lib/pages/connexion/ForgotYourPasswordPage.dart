@@ -95,7 +95,7 @@ class _ForgotYourPasswordState extends State<ForgotYourPassword> {
                           textAlign: TextAlign.left,
                           style: TextStyle(
                             fontSize: 24,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                       ],

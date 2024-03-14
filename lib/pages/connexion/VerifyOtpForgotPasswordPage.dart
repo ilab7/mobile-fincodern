@@ -97,7 +97,7 @@ class _VerifyOtpForgotPasswordPageState extends State<VerifyOtpForgotPasswordPag
                             textAlign: TextAlign.left,
                             style: TextStyle(
                               fontSize: 24,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
                         ],

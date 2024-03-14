@@ -100,7 +100,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
                             textAlign: TextAlign.left,
                             style: TextStyle(
                               fontSize: 24,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
                         ],

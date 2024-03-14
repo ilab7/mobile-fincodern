@@ -58,7 +58,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 21,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height * 0.1),

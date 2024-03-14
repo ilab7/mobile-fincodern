@@ -87,7 +87,7 @@ class OnBoardingPageState extends State<OnBoardingPage> {
           child: ElevatedButton(
             child: const Text(
               'Let\'s go right away!',
-              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w700),
             ),
             onPressed: () => _onIntroEnd(context),
           ),
