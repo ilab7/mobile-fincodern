@@ -1,31 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_fincopay/controllers/UserController.dart';
+import 'package:mobile_fincopay/pages/connexion/VerifyOtpLoginWithPhonePage.dart';
 import 'package:mobile_fincopay/utils/Routes.dart';
 import 'package:mobile_fincopay/widgets/ChargementWidget.dart';
-import 'package:mobile_fincopay/widgets/EntryFieldPasswordWidgets.dart';
+import 'package:mobile_fincopay/widgets/CustomVisibilityWidget.dart';
 import 'package:mobile_fincopay/widgets/MessageWidgets.dart';
 import 'package:mobile_fincopay/widgets/ReusableButtonWidgets.dart';
 import 'package:provider/provider.dart';
 
-class AccountFoundedPage extends StatefulWidget {
+class AccountFoundedPhoneToLoginPage extends StatefulWidget {
   final dynamic userInfo;
 
-  const AccountFoundedPage({Key? key, required this.userInfo}) : super(key: key);
+  const AccountFoundedPhoneToLoginPage({Key? key, required this.userInfo}) : super(key: key);
 
   @override
-  State<AccountFoundedPage> createState() => _AccountFoundedPageState();
+  State<AccountFoundedPhoneToLoginPage> createState() => _AccountFoundedPhoneToLoginPageState();
 }
 
-class _AccountFoundedPageState extends State<AccountFoundedPage> {
+class _AccountFoundedPhoneToLoginPageState extends State<AccountFoundedPhoneToLoginPage> {
+
   bool iSButtonPressedSignIn = false;
   bool isButtonPressedUseAnOtherAccount = false;
   bool isButtonPressedForgotpassword = false;
-  var email = TextEditingController();
-  var password = TextEditingController();
 
   var formKey = GlobalKey<FormState>();
   bool isVisible = false;
   bool isLoadingWaitingAPIResponse = false;
+
+  var appname = "FINCOPAY";
+  //CustomVisibility Bloc variable
+  bool isCancelButtonVisible = false;
+  String? userId; // Declare the userId variable here
 
   @override
   Widget build(BuildContext context) {
@@ -101,49 +106,39 @@ class _AccountFoundedPageState extends State<AccountFoundedPage> {
                   ),
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-
-                SizedBox(height: 16),
-                EntryFieldPasswordWidgets(
-                  ctrl: password,
-                  label: "Enter your Password",
-                  required: true,
-                  isPassword: false,
-                ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.015),
-
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 18.0),
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.pushReplacementNamed(context, Routes.ForgotYourPasswordPageRoutes);
-                      setState(() {
-                        isButtonPressedForgotpassword = !isButtonPressedForgotpassword;
-                      });
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          'Forgot Password',
-                          style: TextStyle(
-                            fontSize: 15,
-                          ),
-                        ),
-                      ],
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Text(
+                    '${widget.userInfo['phone'] == null ? "Phone : null" : widget.userInfo['phone']}',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-
+                SizedBox(height: MediaQuery.of(context).size.height * 0.052),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Text(
+                    'By pressing Login button, you\'ll receive otp to your mobile phone number to verify to login.',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      fontSize: 15,
+                    ),
+                  ),
+                ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.04),
                 ReusableButtonWidgets(
                   text: "Login",
                   fontSize: 14,
-                  onPressed: isLoadingWaitingAPIResponse ? null : _handleLoginPressed,
+                  onPressed: isLoadingWaitingAPIResponse ? null : _handleRequestOTPtoLoginPressed,
                   color: Color(0xFF336699),
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.023),
 
-                Container(
+                //Bloc of Login with Google or Facebook
+                /*Container(
                   padding: EdgeInsets.symmetric(horizontal: 16.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -204,8 +199,29 @@ class _AccountFoundedPageState extends State<AccountFoundedPage> {
                       ),
                     ],
                   ),
-                ),
+                ),*/
 
+                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          Navigator.pushNamedAndRemoveUntil(context, Routes.LoginPageRoutes, ModalRoute.withName('/loginpage'),);
+                        },
+                        child: Text(
+                          'Login With Email',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Color(0xFF336699),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.05),
 
                 Container(
@@ -224,7 +240,7 @@ class _AccountFoundedPageState extends State<AccountFoundedPage> {
                           child: Text(
                             'Use an other account',
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 14,
                             ),
                           ),
                         ),
@@ -232,7 +248,24 @@ class _AccountFoundedPageState extends State<AccountFoundedPage> {
                     ],
                   ),
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.06),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+                CustomVisibilityWidget(
+                  visible: isCancelButtonVisible,
+                  onPressed: () {
+                    setState(() {
+                      isCancelButtonVisible = false;
+                      isLoadingWaitingAPIResponse = false;
+                    });
+                  },
+                  child: Text(
+                    'Cancel query',
+                    textAlign: TextAlign.right,
+                    style: TextStyle(
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.04),
               ],
             ),
           ),
@@ -241,7 +274,7 @@ class _AccountFoundedPageState extends State<AccountFoundedPage> {
     );
   }
 
-  Future<void> LoginPressed() async {
+  Future<void> RequestOTPtoLogin() async {
     FocusScope.of(context).requestFocus(new FocusNode());
     if (!formKey.currentState!.validate()) {
       return;
@@ -252,55 +285,56 @@ class _AccountFoundedPageState extends State<AccountFoundedPage> {
       isLoadingWaitingAPIResponse = true;
     });
 
+    var phone = widget.userInfo['phone'];
     var ctrl = context.read<UserController>();
     Map data = {
-      "password": password.text
+      "phone":phone, //The phone number is complete it's means : with Country Code ************************************
+      "appName":appname
     };
 
-    var response = await ctrl.login(data);
-    await Future.delayed(Duration(seconds: 1));
+    var response = await ctrl.requestOTPPhoneNumber(data);
+    await Future.delayed(Duration(seconds: 10));
 
     isVisible = false;
     setState(() {});
-    print(response.status);
-    Navigator.popAndPushNamed(context, Routes.BottomNavigationPageRoutes); //To delete after api connexion
+
+    userId = response.data?["data"]["userId"] ?? ''; // Here we take the UserId
+    print("USERID CHECKING  : $userId");
+
+
     if (response.status) {
-      await Future.delayed(Duration(seconds: 1));
+      await Future.delayed(Duration(seconds: 12));
       setState(() {});
-      Navigator.pushReplacementNamed(context, Routes.BottomNavigationPageRoutes);
-      var msg = (response.data?['message']);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => VerifyOtpLoginWithPhonePage(userId: userId),
+        ),
+      );
+      var msg = (response.data?['message'] ?? "Enter the OPT sent to phone number");
       MessageWidgetsSuccess.showSnack(context, msg);
+
     } else {
-      var msg =
-      response.isException == true ? response.errorMsg : (response.data?['message']);
+      var msg = response.isException == true ? response.errorMsg : (response.data?['message']);
       MessageWidgets.showSnack(context, msg);
     }
     setState(() {
       isLoadingWaitingAPIResponse = false;
     });
   }
-
-  void _handleLoginPressed() async {
+  void _handleRequestOTPtoLoginPressed() async {
     if(isLoadingWaitingAPIResponse) return;
+
     setState(() {
       isLoadingWaitingAPIResponse = true;
+      isCancelButtonVisible = true;
     });
 
-    await LoginPressed();
+    await RequestOTPtoLogin();
 
     setState(() {
       isLoadingWaitingAPIResponse = false;
+      isCancelButtonVisible = false;
     });
-  }
-
-  showSnackBar(context, String message) {
-    final scaffold = ScaffoldMessenger.of(context);
-    scaffold.showSnackBar(SnackBar(
-      content: Text(message),
-      action:
-      SnackBarAction(label: 'OK',
-          textColor: Colors.orange,
-          onPressed: scaffold.hideCurrentSnackBar),
-    ));
   }
 }

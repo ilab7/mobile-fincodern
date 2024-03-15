@@ -299,7 +299,7 @@ class _VerifyOtpLoginWithPhonePageState extends State<VerifyOtpLoginWithPhonePag
       await Future.delayed(Duration(seconds: 1));
       setState(() {});
       Navigator.pushNamedAndRemoveUntil(context, Routes.BottomNavigationPageRoutes, ModalRoute.withName('/discoverpage'),);
-      var msg = (response.data?['message'] ?? "");
+      var msg = (response.data?['message'] ?? "You're login");
       MessageWidgetsSuccess.showSnack(context, msg);
     } else {
       var msg = response.isException == true ? response.errorMsg : (response.data?['message']);

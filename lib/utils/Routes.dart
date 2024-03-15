@@ -4,7 +4,7 @@ class Routes {
   static const String LoginPageRoutes = "/loginpage";
   static const String LoginWithPhoneNumberRequestOTPPageRoutes = "/loginwithphonenumberrequestotppage";
   static const String FindYourAccountPageRoutes = "/findyouraccountpage";
-  static const String AccountFoundedPageRoutes = "/accountfoundedpage";
+  static const String AccountFoundedEmailToLoginPageRoutes = "/accountfoundedemailtologinpage";
   static const String SignUpPagePageRoutes = "/signuppage";
   static const String ForgotYourPasswordPageRoutes = "/forgotyourpasswordpage";
   static const String CreateNewPasswordPageRoutes = "/createnewpasswordpage";

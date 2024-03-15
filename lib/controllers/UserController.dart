@@ -42,10 +42,17 @@ class UserController with ChangeNotifier {
     var url = "${Endpoints.find_by_email}";
     HttpResponse response = await postData(url, data);
     print("HI Josue I am outside FindAccountEmail");
-    if (response.status) {
+    /*if (response.status) {
       stockage?.write(StockageKeys.userKey, response.data?['data']['userId'] ?? {});
       print("HI Josue I am inside FindAccountEmail");
       notifyListeners();
+    }*/
+    if (response.status) {
+      if (response.data?['data'] is Map) {
+        stockage?.write(StockageKeys.userKey, response.data?['data']['userId'] ?? {});
+        print("HI Josue I am inside FindAccountEmail");
+        notifyListeners();
+      }
     }
     return response;
   }

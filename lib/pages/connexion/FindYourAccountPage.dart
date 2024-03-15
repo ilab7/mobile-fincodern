@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_fincopay/controllers/UserController.dart';
-import 'package:mobile_fincopay/pages/connexion/AccountFoundedPage.dart';
+import 'package:mobile_fincopay/pages/connexion/AccountFoundedEmailToLoginPage.dart';
+import 'package:mobile_fincopay/pages/connexion/AccountFoundedPhoneToLoginPage.dart';
 import 'package:mobile_fincopay/utils/Routes.dart';
 import 'package:mobile_fincopay/widgets/ChargementWidget.dart';
 import 'package:mobile_fincopay/widgets/CustomVisibilityWidget.dart';
@@ -268,22 +269,33 @@ class _FindYourAccountPageState extends State<FindYourAccountPage> {
     if (response.status) {
       await Future.delayed(Duration(seconds: 1));
       setState(() {});
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => AccountFoundedPage(userInfo: userInfo),
-        ),
-      );
-      var msg = (response.data?['message'] ?? "");
-      MessageWidgetsSuccess.showSnack(context, msg);
-
-    } else {
-      var msg = response.isException == true ? response.errorMsg : (response.data?['message']);
-      MessageWidgets.showSnack(context, msg);
+      //If response.date contains email and phone, then, show field of
+      if(response.data?["data"] != null && response.data?["data"].containsKey("email")){
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => AccountFoundedEmailToLoginPage(userInfo: userInfo),
+          ),
+        );
+      } else if (response.data?["data"] != null && response.data?["data"].containsKey("phone")){
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => AccountFoundedPhoneToLoginPage(userInfo: userInfo),
+          ),
+        );
+      } else if (response.data?.containsKey("message")){
+        //Navigator.popAndPushNamed(context, Routes.PasswordChangedPageRoutes);
+        var msg = "No account linked to this email";
+        MessageWidgetsSuccess.showSnack(context, msg);
+      }else {
+        var msg = response.isException == true ? response.errorMsg : (response.data?['message']);
+        MessageWidgets.showSnack(context, msg);
+      }
+      setState(() {
+        isLoadingWaitingAPIResponse = false;
+      });
     }
-    setState(() {
-      isLoadingWaitingAPIResponse = false;
-    });
   }
 
   void _handleFindYourAccountPressed() async {

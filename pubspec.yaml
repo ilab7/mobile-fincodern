@@ -82,7 +82,7 @@ flutter:
     - assets/image1.jpg
     - assets/image2.jpeg
     - assets/image3.jpeg
-    - assets/google_fonts
+    - assets/google_fonts/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -96,10 +96,17 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
+  fonts:
+    - family: Montserrat
+      fonts:
+       - asset: assets/google_fonts/Montserrat-Black.ttf
+       - asset: assets/google_fonts/Montserrat-Bold.ttf
+       - asset: assets/google_fonts/Montserrat-ExtraBold.ttf
+       - asset: assets/google_fonts/Montserrat-Italic.ttf
+       - asset: assets/google_fonts/Montserrat-Medium.ttf
+       - asset: assets/google_fonts/Montserrat-Regular.ttf
+       - asset: assets/google_fonts/Montserrat-SemiBold.ttf
+       - asset: assets/google_fonts/Montserrat-Thin.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro
