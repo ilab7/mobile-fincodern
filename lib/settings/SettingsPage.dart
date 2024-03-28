@@ -124,7 +124,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                     'Change the theme of the application.',
                                     textAlign: TextAlign.left,
                                     style: TextStyle(
-                                      fontSize: 15,
+                                      fontSize: 13,
                                     ),
                                   ),
                                 ),
@@ -178,7 +178,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                     'Change the language of the application',
                                     textAlign: TextAlign.left,
                                     style: TextStyle(
-                                      fontSize: 15,
+                                      fontSize: 13,
                                     ),
                                   ),
                                 ),
@@ -232,7 +232,61 @@ class _SettingsPageState extends State<SettingsPage> {
                                     'Create an other password',
                                     textAlign: TextAlign.left,
                                     style: TextStyle(
-                                      fontSize: 15,
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                              height:
+                              MediaQuery.of(context).size.height * 0.02),
+                          Container(
+                            height: 1.0,
+                            width: double.infinity,
+                            color: Colors.grey,
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+                    InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(context, Routes.LockByThumbPrintPageRoutes);
+                      },
+                      child: Column(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 16.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Verrouillage par empreinte digitale',
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                              height:
+                              MediaQuery.of(context).size.height * 0.01),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 16.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    'Désactivé',
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      fontSize: 13,
                                     ),
                                   ),
                                 ),

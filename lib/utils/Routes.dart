@@ -22,4 +22,5 @@ class Routes {
   static const String NavigationDrawerMenuRoutes = "/navigationdrawermenu";
   static const String VerifyOtpLoginWithPhonePageRoutes = "/verifyotploginwithphonepage";
   static const String OnBoardingPageRoutes = "/onboardingpage";
+  static const String LockByThumbPrintPageRoutes = "/lockbythumbprintpage";
 }

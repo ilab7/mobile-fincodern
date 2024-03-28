@@ -16,6 +16,7 @@ import 'package:mobile_fincopay/pages/user/EditProfilePage.dart';
 import 'package:mobile_fincopay/pages/user/ProfilPage.dart';
 import 'package:mobile_fincopay/settings/SettingsPage.dart';
 import 'package:mobile_fincopay/settings/changepassword/ChangePasswordPage.dart';
+import 'package:mobile_fincopay/settings/lockthumbprint/LockByThumbPrintPage.dart';
 import 'Routes.dart';
 
 
@@ -78,6 +79,9 @@ class RoutesManager {
 
       case Routes.OnBoardingPageRoutes:
         return MaterialPageRoute(builder: (_) => OnBoardingPage());
+
+      case Routes.LockByThumbPrintPageRoutes:
+        return MaterialPageRoute(builder: (_) => LockByThumbPrintPage());
 
       default:
         return null;
